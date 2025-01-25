@@ -9,7 +9,7 @@
 
 :OlympicsOntology a owl:Ontology ;
     owl:versionInfo "1.0" ;
-    dc:creator "Salma, Guillaume, Timothée" ;
+    dc:creator "Salme, Guillaume, Timothée" ;
     dc:date "2025-01-24"^^xsd:date ;
     dc:title "Olympics Data Ontology" ;
     dc:description "This ontology represents data related to the Olympic Games, including athletes, events, venues, and medals." ;
@@ -22,7 +22,7 @@
 
 
 
-[] rdf:type owl:AllDisjointClasses ;
+[] rdf:type owl: AllDisjointClasses ;
         owl:members
                 ( :Country :City :Venue :Discipline :Trial :Event) .
 
@@ -39,13 +39,13 @@
         rdfs:domain [ rdfs:Class :Athlete, :Team ] ;
         rdfs:range :Performance ;
         rdfs:comment "Links an athlete or team to their performance in an event." ;
-        owl:inverseOf :playedBy . 
+        owl:inverseOf :playedBy .
 
 
 ###-------------------BEGIN CLASS _Disabled-----------------------------------------------------
 
 
-:_isDisabled rdf:type owl:Class ; 
+:_isDisabled rdf:type owl:Class ;
         rdfs:subClassOf [
                 a owl:Restriction ;
                 owl:onProperty :isDisabled ;
@@ -130,9 +130,9 @@
 
 :name rdf:type owl:DatatypeProperty ;
         rdfs:label "name" ;
-        rdfs:domain [ rdfs:Class :Athlete, 
+        rdfs:domain [ rdfs:Class :Athlete,
         :Team, :Country, :City, :Venue, :Olympic,
-        :Event, :Discipline, :Trial, :Medal, :WorldRecord, 
+        :Event, :Discipline, :Trial, :Medal, :WorldRecord,
         :OlympicRecord, :OlympicCommittee, :Represent, :Coordinate, :Units, :Person ] ;
         rdfs:range xsd:string ;
         rdfs:comment "Specifies the name of the athlete." .
@@ -164,7 +164,7 @@
 
 ###-------------------BEGIN CLASS _ObjectCode---------------------------------------------------
 
-:_ObjectCode a owl:Class ; 
+:_ObjectCode a owl:Class ;
    rdfs:subClassOf [
       a owl:Restriction ;
       owl:onProperty :hasCode ;
@@ -191,9 +191,9 @@
 
 :hasDescription rdf:type owl:DatatypeProperty ;
         rdfs:label "has description" ;
-        rdfs:domain [ rdfs:Class :Athlete, 
+        rdfs:domain [ rdfs:Class :Athlete,
         :Team, :Country, :City, :Venue, :Olympic,
-        :Event, :Discipline, :Trial, :Medal, :WorldRecord, 
+        :Event, :Discipline, :Trial, :Medal, :WorldRecord,
         :OlympicRecord, :OlympicCommittee, :Represent, :Coordinate, :Units, :Person ] ;
         rdfs:range xsd:string ;
         rdfs:comment "Provides a descriptive detail about the athlete." .
@@ -249,23 +249,23 @@
     sh:property [
         sh:path :isDisabled ;
         sh:datatype xsd:boolean ;
-        sh:minCount 1 ; 
-        sh:maxCount 1 ; 
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
         sh:message "A team must have exactly one value for 'isDisabled'." ;
     ] ;
 
     sh:property [
         sh:path :represent ;
         sh:class :Represent ;
-        sh:minCount 1 ; 
-        sh:maxCount 1 ; 
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
         sh:message "A team must represent exactly one entity." ;
     ] ;
 
     sh:property [
         sh:path :hasMember ;
         sh:class :Athlete ;
-        sh:minCount 1 ; 
+        sh:minCount 1 ;
         sh:message "A team must have at least one member." ;
     ] ;
 
@@ -275,7 +275,7 @@
             SELECT $this
             WHERE {
                 FILTER NOT EXISTS {
-                    $this :hasMember ?athlete .         
+                    $this :hasMember ?athlete .
                     ?athlete :isPartOfTeam $this .
                 }
             }
@@ -288,7 +288,7 @@
             SELECT $this
             WHERE {
                 FILTER NOT EXISTS {
-                    $this :participatesIn ?event .         
+                    $this :participatesIn ?event .
                     ?event :hasParticipant $this .
                 }
             }
@@ -300,17 +300,17 @@
         sh:select """
             SELECT $this
             WHERE {
-                $this :hasMember ?athlete .           
-                $this :isDisabled ?teamDisabled .   
-                $this :represent ?teamRepresent .   
-                $this :participatesIn ?teamEvent .   
+                $this :hasMember ?athlete .
+                $this :isDisabled ?teamDisabled .
+                $this :represent ?teamRepresent .
+                $this :participatesIn ?teamEvent .
 
-                ?athlete :isDisabled ?athleteDisabled .    
-                ?athlete :represent ?athleteRepresent .    
-                ?athlete :participatesIn ?athleteEvent .   
+                ?athlete :isDisabled ?athleteDisabled .
+                ?athlete :represent ?athleteRepresent .
+                ?athlete :participatesIn ?athleteEvent .
 
-                FILTER (?athleteDisabled != ?teamDisabled || 
-                        ?athleteRepresent != ?teamRepresent || 
+                FILTER (?athleteDisabled != ?teamDisabled ||
+                        ?athleteRepresent != ?teamRepresent ||
                         ?athleteEvent != ?teamEvent)
             }
         """ ;
@@ -378,7 +378,7 @@
 :height rdf:type owl:DatatypeProperty ;
         rdfs:label "height" ;
         rdfs:domain :Athlete ;
-        rdfs:range [ 
+        rdfs:range [
                 a rdfs:Datatype ;
                 owl:onDatatype xsd:decimal ;
                 owl:withRestrictions (
@@ -391,7 +391,7 @@
 :weight rdf:type owl:DatatypeProperty ;
         rdfs:label "weight" ;
         rdfs:domain :Athlete ;
-        rdfs:range [ 
+        rdfs:range [
                 a rdfs:Datatype ;
                 owl:onDatatype xsd:decimal ;
                 owl:withRestrictions (
@@ -404,7 +404,7 @@
 :birthDate rdf:type owl:DatatypeProperty ;
         rdfs:label "birth date" ;
         rdfs:domain :Athlete ;
-        rdfs:range [ 
+        rdfs:range [
                 a rdfs:Datatype ;
                 owl:onDatatype xsd:date ;
                 owl:withRestrictions (
@@ -417,7 +417,7 @@
 :deathDate rdf:type owl:DatatypeProperty ;
         rdfs:label "death date" ;
         rdfs:domain :Athlete ;
-        rdfs:range [ 
+        rdfs:range [
                 a rdfs:Datatype ;
                 owl:onDatatype xsd:date ;
                 owl:withRestrictions (
@@ -436,7 +436,7 @@
 :gender rdf:type owl:DatatypeProperty ;
         rdfs:label "gender" ;
         rdfs:domain :Athlete ;
-        rdfs:range xsd:string ; 
+        rdfs:range xsd:string ;
         rdfs:comment "Specifies the gender of the athlete (Male, Female)." .
 :gender a owl:FunctionalProperty .
 
@@ -472,7 +472,7 @@
         sh:datatype xsd:decimal ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
-        sh:minInclusive 0 ;  
+        sh:minInclusive 0 ;
         sh:message "A person must have exactly one height value, and it must be greater than or equal to 0 centimeter." ;
     ] ;
 
@@ -481,7 +481,7 @@
         sh:datatype xsd:decimal ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
-        sh:minInclusive 30000 ; 
+        sh:minInclusive 30000 ;
         sh:message "A person must have exactly one weight value, and it must be greater than or equal to 30,000 grams (30kg)." ;
     ] ;
 
@@ -510,7 +510,7 @@
         sh:datatype xsd:string ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
-        sh:message "A person must have exactly one gender value." ; #TODO 
+        sh:message "A person must have exactly one gender value." ; #TODO
     ] ;
 
     sh:property [
@@ -573,7 +573,7 @@
         sh:path :isDisabled ;
         sh:datatype xsd:boolean ;
         sh:minCount 1 ;
-        sh:maxCount 1 ; 
+        sh:maxCount 1 ;
         sh:message "An athlete must have exactly one value for 'isDisabled'." ;
     ] ;
 
@@ -581,7 +581,7 @@
         sh:path :isPersonOf ;
         sh:class :Person ;
         sh:minCount 1 ;
-        sh:maxCount 1 ; 
+        sh:maxCount 1 ;
         sh:message "An athlete must be linked to exactly one person." ;
     ] ;
 
@@ -589,7 +589,7 @@
         sh:path :represent ;
         sh:class :Represent ;
         sh:minCount 1 ;
-        sh:maxCount 1 ; 
+        sh:maxCount 1 ;
         sh:message "An athlete must represent exactly one entity." ;
     ] ;
 
@@ -599,8 +599,8 @@
             SELECT $this
             WHERE {
                 FILTER NOT EXISTS {
-                    $this :isPartOfTeam ?team .  
-                    ?team :hasMember $this .     
+                    $this :isPartOfTeam ?team .
+                    ?team :hasMember $this .
                 }
             }
         """ ;
@@ -612,7 +612,7 @@
             SELECT $this
             WHERE {
                 FILTER NOT EXISTS {
-                    $this :participatesIn ?event .         
+                    $this :participatesIn ?event .
                     ?event :hasParticipant $this .
                 }
             }
@@ -628,13 +628,13 @@
                 $this :isDisabled ?athleteDisabled .
                 $this :represent ?athleteRepresent .
                 $this :participatesIn ?athleteEvent .
-                
+
                 ?team :isDisabled ?teamDisabled .
                 ?team :represent ?teamRepresent .
                 ?team :participatesIn ?teamEvent .
 
-                FILTER (?athleteDisabled != ?teamDisabled || 
-                        ?athleteRepresent != ?teamRepresent || 
+                FILTER (?athleteDisabled != ?teamDisabled ||
+                        ?athleteRepresent != ?teamRepresent ||
                         ?athleteEvent != ?teamEvent)
             }
         """ ;
@@ -731,9 +731,9 @@
 
     sh:property [
         sh:path :hasCoordinate ;
-        sh:class :Coordinate ; 
-        sh:minCount 1 ; 
-        sh:maxCount 1 ; 
+        sh:class :Coordinate ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
         sh:message "The venue must have exactly one coordinate." ;
     ] ;
 
@@ -766,16 +766,16 @@
     sh:property [
         sh:path :hasCountry ;
         sh:class :Country ;
-        sh:minCount 1 ; 
-        sh:maxCount 1 ; 
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
         sh:message "The venue must be linked to exactly one country." ;
     ] ;
 
     sh:property [
         sh:path :hasCoordinate ;
-        sh:class :Coordinate ; 
-        sh:minCount 1 ; 
-        sh:maxCount 1 ; 
+        sh:class :Coordinate ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
         sh:message "The venue must have exactly one coordinate." ;
     ] ;
 
@@ -800,7 +800,7 @@
                         owl:minCardinality "1"^^xsd:nonNegativeInteger ;
                         owl:maxCardinality "1"^^xsd:nonNegativeInteger
                 ] .
-        
+
 :hasCapacity rdf:type owl:DatatypeProperty ;
         rdfs:label "venue capacity" ;
         rdfs:domain :Venue ;
@@ -819,7 +819,8 @@
         rdfs:label "hosts" ;
         rdfs:domain :Venue ;
         rdfs:range :Event ;
-        rdfs:comment "Links a venue to the events it hosts." .
+        rdfs:comment "Links a venue to the events it hosts." ;
+        owl:inverseOf :hostedBy .
 
 
 :VenueShape a sh:NodeShape ;
@@ -828,7 +829,7 @@
     sh:property [
         sh:path :hasCity ;
         sh:class :City ;
-        sh:minCount 1 ; 
+        sh:minCount 1 ;
         sh:maxCount 1 ;
         sh:message "The venue must be linked to exactly one city." ;
     ] ;
@@ -836,18 +837,31 @@
     sh:property [
         sh:path :hasCountry ;
         sh:class :Country ;
-        sh:minCount 1 ; 
-        sh:maxCount 1 ; 
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
         sh:message "The venue must be linked to exactly one country." ;
     ] ;
 
     sh:property [
         sh:path :hasCoordinate ;
-        sh:class :Coordinate ; 
-        sh:minCount 1 ; 
-        sh:maxCount 1 ; 
+        sh:class :Coordinate ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
         sh:message "The venue must have exactly one coordinate." ;
     ] ;
+
+    sh:sparql [
+        sh:message "The event in 'hosts' must have the venue as their 'hostedBy'." ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                FILTER NOT EXISTS {
+                    $this :hosts ?event .
+                    ?event :hostedBy $this .
+                }
+            }
+        """ ;
+    ]
 
     sh:sparql [
         sh:message "The country of the venue must be the same as the country of its city." ;
@@ -951,7 +965,7 @@
         rdfs:label "start date" ;
         rdfs:domain :Olympics ;
         rdfs:range xsd:date ;
-        rdfs:range [ 
+        rdfs:range [
                 a rdfs:Datatype ;
                 owl:onDatatype xsd:date ;
                 owl:withRestrictions (
@@ -964,7 +978,7 @@
 :endDate rdf:type owl:DatatypeProperty ;
         rdfs:label "end date" ;
         rdfs:domain :Olympics ;
-        rdfs:range [ 
+        rdfs:range [
                 a rdfs:Datatype ;
                 owl:onDatatype xsd:date ;
                 owl:withRestrictions (
@@ -996,7 +1010,7 @@
         sh:datatype xsd:date ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
-        sh:minInclusive "-776-01-01"^^xsd:date ; 
+        sh:minInclusive "-776-01-01"^^xsd:date ;
         sh:message "The start date must be a valid date after -776-01-01" ;
     ] ;
 
@@ -1058,7 +1072,7 @@
             SELECT $this
             WHERE {
                 FILTER NOT EXISTS {
-                    $this :olympicHasEvent ?event .         
+                    $this :olympicHasEvent ?event .
                     ?event :belongToOlympics $this .
                 }
             }
@@ -1142,6 +1156,9 @@
                         owl:maxCardinality "1"^^xsd:nonNegativeInteger ] ,
                 [ a owl:Restriction ;
                         owl:onProperty :hasParticipant ;
+                        owl:minCardinality "1"^^xsd:nonNegativeInteger ] ,
+                [ a owl:Restriction ;
+                        owl:onProperty :hostedBy ;
                         owl:minCardinality "1"^^xsd:nonNegativeInteger ] .
 
 :belongsToTrial rdf:type owl:ObjectProperty ;
@@ -1177,10 +1194,16 @@
 :hasParticipant rdf:type owl:ObjectProperty ;
         rdfs:label "belong to athlete" ;
         rdfs:domain :Event ;
-        rdfs:range [ rdfs:Class :Athlete :Team ] 
+        rdfs:range [ rdfs:Class :Athlete :Team ]
         rdfs:comment "Links an event to the athlete it belongs to." ;
         owl:inverseOf : participatesIn.
 
+:hostedBy rdf:type owl:ObjectProperty ;
+        rdfs:label "hosted by" ;
+        rdfs:domain :Event ;
+        rdfs:range :Venue ;
+        rdfs:comment "Links an event to the Olympics it is hosted by." ;
+        owl:inverseOf :hosts .
 
 :EventShape a sh:NodeShape ;
     sh:targetClass :Event ;
@@ -1204,6 +1227,12 @@
         sh:minCount 1 ;
         sh:message "An event must have at least one participant." ;
     ] ;
+    sh:property [
+        sh:path :hostedBy ;
+        sh:class :Venue ;
+        sh:minCount 1 ;
+        sh:message "An event must be hosted by at least one venue." ;
+    ] ;
     sh:sparql [
         sh:message "Each athlete or team in 'hasParticipant' must have the event as their 'participatesIn'." ;
         sh:select """
@@ -1224,6 +1253,18 @@
                 FILTER NOT EXISTS {
                     $this :belongToOlympics ?olympic .
                     ?olympic :olympicHasEvent $this .
+                }
+            }
+        """ ;
+    ] ;
+    sh:sparql [
+        sh:message "The venue in 'hostedBy' must have the event as its 'hosts'." ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                FILTER NOT EXISTS {
+                    $this :hostedBy ?venue .
+                    ?venue :hosts $this .
                 }
             }
         """ ;

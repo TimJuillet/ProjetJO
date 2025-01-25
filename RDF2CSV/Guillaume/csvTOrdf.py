@@ -284,6 +284,7 @@ def function_generate_rdf(g, f, namespace: dict, olympicsParameters: dict):
         eventDescription = "Event " + row["Event"] + " on " + transformer_date(date)
         eventParticipants =[]
         eventPerformances = [performanceWritting]
+        eventHostedBy = []
 
         constructorRDF.createCountry(countryName, countryName, countryCode, BlankCoordinateWritting, None)
         constructorRDF.createDiscipline(discplineName, None, discplineName, None)
@@ -312,7 +313,7 @@ def function_generate_rdf(g, f, namespace: dict, olympicsParameters: dict):
                                          performanceName, performanceDescription)
         success = constructorRDF.createEvent(eventWritting, trialName,
                                              date, eventPerformances,
-                                             olympicsParameters["name"], eventParticipants,
+                                             olympicsParameters["name"], eventParticipants, eventHostedBy,
                                              eventName, eventDescription)
         if success:
             olympicsEvent.append(eventWritting)
@@ -516,8 +517,10 @@ class ConstructRDF:
             self.g.add((discipline_uri, self.EX["description"], Literal(description, datatype=XSD.string)))
         return True
 
-    def createEvent(self, eventWriting, belongsToTrial, hasDate, eventHasPerformance, belongToOlympics, hasParticipant : list, name=None,
-                    description=None):
+    def createEvent(self, eventWriting, belongsToTrial, hasDate,
+                    eventHasPerformance, belongToOlympics, hasParticipant : list,
+                    hostedBy : list,
+                    name=None, description=None):
         if eventWriting in self.olympics:
             return False
         event_uri = URIRef(self.EX[eventWriting])
@@ -528,6 +531,8 @@ class ConstructRDF:
             self.g.add((event_uri, self.EX["eventHasPerformance"], URIRef(self.EX[performance])))
         for participant in hasParticipant:
             self.g.add((event_uri, self.EX["hasParticipant"], URIRef(self.EX[participant])))
+        for city in hostedBy:
+            self.g.add((event_uri, self.EX["hostedBy"], URIRef(self.EX[city])))
         self.g.add((event_uri, self.EX["belongToOlympics"], URIRef(self.EX[belongToOlympics])))
         if name:
             self.g.add((event_uri, self.EX["name"], Literal(name, datatype=XSD.string)))
