@@ -9,7 +9,7 @@
 
 :OlympicsOntology a owl:Ontology ;
     owl:versionInfo "1.0" ;
-    dc:creator "Salme, Guillaume, Timothée" ;
+    dc:creator "Salma, Guillaume, Timothée" ;
     dc:date "2025-01-24"^^xsd:date ;
     dc:title "Olympics Data Ontology" ;
     dc:description "This ontology represents data related to the Olympic Games, including athletes, events, venues, and medals." ;
@@ -22,7 +22,7 @@
 
 
 
-[] rdf:type owl: AllDisjointClasses ;
+[] rdf:type owl:AllDisjointClasses ;
         owl:members
                 ( :Country :City :Venue :Discipline :Trial :Event) .
 
