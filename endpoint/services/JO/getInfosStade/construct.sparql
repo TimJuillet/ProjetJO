@@ -29,6 +29,6 @@ WHERE {
   }
   
   # Générer les IRIs
-  BIND(IRI(CONCAT("http://example.org/venue#", ENCODE_FOR_URI(?name), "_", ENCODE_FOR_URI(?desc))) AS ?venue)
-  BIND(IRI(CONCAT("http://example.org/position#", ENCODE_FOR_URI(?name), "_Position")) AS ?coord)
+  BIND(IRI(CONCAT("http://example.org/olympics#", ENCODE_FOR_URI(?name), "_", ENCODE_FOR_URI(?desc))) AS ?venue)
+  BIND(IRI(CONCAT("http://example.org/olympics#", ENCODE_FOR_URI(?name), "_Position")) AS ?coord)
 }
