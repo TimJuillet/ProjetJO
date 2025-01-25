@@ -1,0 +1,155 @@
+@prefix : <http://example.org/olympics#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+### ConceptSchemes
+:OlympicsScheme a skos:ConceptScheme ;
+    skos:prefLabel "Olympics Concept Scheme"@en ;
+    skos:prefLabel "Schéma de concepts des Jeux Olympiques"@fr ;
+    skos:definition "A scheme organizing concepts related to the Olympics."@en ;
+    skos:definition "Un schéma organisant les concepts liés aux Jeux Olympiques."@fr .
+
+:GeographyScheme a skos:ConceptScheme ;
+    skos:prefLabel "Geography Concept Scheme"@en ;
+    skos:prefLabel "Schéma de concepts géographiques"@fr ;
+    skos:definition "A scheme organizing geographic concepts like countries, cities, and venues."@en ;
+    skos:definition "Un schéma organisant les concepts géographiques tels que les pays, villes et lieux."@fr .
+
+:PerformanceScheme a skos:ConceptScheme ;
+    skos:prefLabel "Performance and Medal Scheme"@en ;
+    skos:prefLabel "Schéma des performances et médailles"@fr ;
+    skos:definition "A scheme organizing concepts related to performance metrics and medals."@en ;
+    skos:definition "Un schéma organisant les concepts liés aux performances et aux médailles."@fr .
+
+### Concepts
+
+# Athlete
+:Athlete a skos:Concept ;
+    skos:inScheme :OlympicsScheme ;
+    skos:prefLabel "Athlete"@en ;
+    skos:prefLabel "Athlète"@fr ;
+    skos:altLabel "Olympic Athlete"@en ;
+    skos:altLabel "Athlète olympique"@fr ;
+    skos:definition "Represents an athlete participating in the Olympics."@en ;
+    skos:definition "Représente un athlète participant aux Jeux olympiques."@fr ;
+    skos:broader :Person ;
+    skos:related :Team ;
+    skos:scopeNote "Athletes are distinguished by their unique participation in sports teams and events."@en ;
+    skos:scopeNote "Les athlètes se distinguent par leur participation unique à des équipes sportives et à des événements."@fr ;
+    skos:editorialNote "Ensure compliance with ethical data usage when managing athlete information."@en .
+
+# Team
+:Team a skos:Concept ;
+    skos:inScheme :OlympicsScheme ;
+    skos:prefLabel "Team"@en ;
+    skos:prefLabel "Équipe"@fr ;
+    skos:altLabel "Olympic Team"@en ;
+    skos:altLabel "Équipe olympique"@fr ;
+    skos:definition "Represents a team participating in the Olympics."@en ;
+    skos:definition "Représente une équipe participant aux Jeux olympiques."@fr ;
+    skos:related :Athlete ;
+    skos:narrower :Athlete ;
+    skos:scopeNote "A team must have at least one member."@en ;
+    skos:scopeNote "Une équipe doit avoir au moins un membre."@fr ;
+    skos:editorialNote "Ensure team properties are consistent across related entities."@en .
+
+# Country
+:Country a skos:Concept ;
+    skos:inScheme :GeographyScheme ;
+    skos:prefLabel "Country"@en ;
+    skos:prefLabel "Pays"@fr ;
+    skos:altLabel "Nation"@en ;
+    skos:altLabel "Nation"@fr ;
+    skos:definition "Represents a country participating in the Olympics."@en ;
+    skos:definition "Représente un pays participant aux Jeux olympiques."@fr ;
+    skos:related :City ;
+    skos:hasTopConcept :Coordinate ;
+    skos:scopeNote "Countries must include relevant geographic and political data."@en ;
+    skos:scopeNote "Les pays doivent inclure des données géographiques et politiques pertinentes."@fr .
+
+# City
+:City a skos:Concept ;
+    skos:inScheme :GeographyScheme ;
+    skos:prefLabel "City"@en ;
+    skos:prefLabel "Ville"@fr ;
+    skos:altLabel "Host City"@en ;
+    skos:altLabel "Ville hôte"@fr ;
+    skos:definition "Represents a city hosting or accommodating Olympic events."@en ;
+    skos:definition "Représente une ville accueillant ou hébergeant des événements olympiques."@fr ;
+    skos:broader :Country ;
+    skos:scopeNote "A city must be associated with exactly one country."@en ;
+    skos:scopeNote "Une ville doit être associée à un seul pays."@fr .
+
+# Venue
+:Venue a skos:Concept ;
+    skos:inScheme :GeographyScheme ;
+    skos:prefLabel "Venue"@en ;
+    skos:prefLabel "Lieu"@fr ;
+    skos:altLabel "Event Venue"@en ;
+    skos:altLabel "Lieu de l'événement"@fr ;
+    skos:definition "Represents a venue for Olympic events."@en ;
+    skos:definition "Représente un lieu pour les événements olympiques."@fr ;
+    skos:broader :City ;
+    skos:scopeNote "Venues must include capacity, coordinates, and city information."@en ;
+    skos:scopeNote "Les lieux doivent inclure des informations sur la capacité, les coordonnées et la ville."@fr .
+
+# Olympics
+:Olympics a skos:Concept ;
+    skos:inScheme :OlympicsScheme ;
+    skos:prefLabel "Olympics"@en ;
+    skos:prefLabel "Jeux Olympiques"@fr ;
+    skos:altLabel "Olympic Games"@en ;
+    skos:altLabel "Jeux Olympiques d'été/hiver"@fr ;
+    skos:definition "Represents an Olympic event, either Winter or Summer."@en ;
+    skos:definition "Représente un événement olympique, hiver ou été."@fr ;
+    skos:hasTopConcept :Event ;
+    skos:scopeNote "Olympics must include at least one venue and trial."@en ;
+    skos:scopeNote "Les JO doivent inclure au moins un lieu et une épreuve."@fr .
+
+# Event
+:Event a skos:Concept ;
+    skos:inScheme :OlympicsScheme ;
+    skos:prefLabel "Event"@en ;
+    skos:prefLabel "Événement"@fr ;
+    skos:altLabel "Sports Event"@en ;
+    skos:altLabel "Épreuve sportive"@fr ;
+    skos:definition "Represents a specific event in a discipline (e.g., 100m Sprint)."@en ;
+    skos:definition "Représente une épreuve spécifique dans une discipline (ex. 100m sprint)."@fr ;
+    skos:broader :Trial ;
+    skos:related :Discipline ;
+    skos:scopeNote "Events are linked to trials and performances."@en ;
+    skos:scopeNote "Les événements sont liés aux épreuves et aux performances."@fr .
+
+# Trial
+:Trial a skos:Concept ;
+    skos:inScheme :OlympicsScheme ;
+    skos:prefLabel "Trial"@en ;
+    skos:prefLabel "Épreuve"@fr ;
+    skos:definition "Represents a specific trial in a discipline (e.g., 100m Sprint)."@en ;
+    skos:definition "Représente une épreuve spécifique dans une discipline (ex. 100m sprint)."@fr ;
+    skos:broader :Discipline ;
+    skos:scopeNote "Trials must specify their discipline and team participation."@en ;
+    skos:scopeNote "Les épreuves doivent préciser leur discipline et leur participation par équipe."@fr .
+
+# Performance
+:Performance a skos:Concept ;
+    skos:inScheme :PerformanceScheme ;
+    skos:prefLabel "Performance"@en ;
+    skos:prefLabel "Performance"@fr ;
+    skos:definition "Represents an athlete's performance in an event, including results and rankings."@en ;
+    skos:definition "Représente la performance d'un athlète dans un événement, y compris les résultats et classements."@fr ;
+    skos:related :Event ;
+    skos:scopeNote "Each performance must include the result, rank, and associated event."@en ;
+    skos:scopeNote "Chaque performance doit inclure le résultat, le classement et l'événement associé."@fr .
+
+# Medal
+:Medal a skos:Concept ;
+    skos:inScheme :PerformanceScheme ;
+    skos:prefLabel "Medal"@en ;
+    skos:prefLabel "Médaille"@fr ;
+    skos:altLabel "Award"@en ;
+    skos:altLabel "Récompense"@fr ;
+    skos:definition "Represents a medal (Gold, Silver, Bronze)."@en ;
+    skos:definition "Représente une médaille (Or, Argent, Bronze)."@fr ;
+    skos:hasTopConcept :Performance ;
+    skos:scopeNote "Medals must be associated with ranks and events."@en ;
+    skos:scopeNote "Les médailles doivent être associées à des classements et à des événements."@fr .

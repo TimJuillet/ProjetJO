@@ -1,0 +1,167 @@
+
+_:tablegroup__1 a <http://www.w3.org/ns/csvw#TableGroup>;
+  <http://www.w3.org/ns/csvw#table> _:table__2 .
+
+_:table__2 a <http://www.w3.org/ns/csvw#Table>;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv>;
+  <http://www.w3.org/ns/csvw#row> _:row__3, _:row__5, _:row__7, _:row__9, _:row__11,
+    _:row__13, _:row__15, _:row__17, _:row__19, _:row__21, _:row__23, _:row__25, _:row__27,
+    _:row__29 .
+
+_:row__3 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 1;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=2>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/Jeux%20olympiques%20d%27%C3%A9t%C3%A9%20de%202024>,
+    _:bnode__4 .
+
+<http://example.org/olympics/Jeux%20olympiques%20d%27%C3%A9t%C3%A9%20de%202024> a
+    <http://example.org/olympics#Olympics> .
+
+_:bnode__4 <http://example.org/olympics/point%20in%20time> "point in time";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/2024> .
+
+_:row__5 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 2;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=3>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/Jeux%20olympiques%20d%27%C3%A9t%C3%A9%20de%202024>,
+    _:bnode__6 .
+
+_:bnode__6 <http://example.org/olympics/point%20in%20time> "point in time";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/2024> .
+
+_:row__7 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 3;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=4>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/Trocad%C3%A9ro>,
+    _:bnode__8 .
+
+<http://example.org/olympics/Trocad%C3%A9ro> a <http://example.org/olympics#Olympics> .
+
+_:bnode__8 <http://example.org/olympics/located%20in%20the%20administrative%20territorial%20entity>
+    "located in the administrative territorial entity";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/ville%20de%20Paris> .
+
+_:row__9 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 4;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=5>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/tour%20Eiffel>,
+    _:bnode__10 .
+
+<http://example.org/olympics/tour%20Eiffel> a <http://example.org/olympics#Olympics> .
+
+_:bnode__10 <http://example.org/olympics/located%20in%20the%20administrative%20territorial%20entity>
+    "located in the administrative territorial entity";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/ville%20de%20Paris> .
+
+_:row__11 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 5;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=6>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/Champ-de-Mars>,
+    _:bnode__12 .
+
+<http://example.org/olympics/Champ-de-Mars> a <http://example.org/olympics#Olympics> .
+
+_:bnode__12 <http://example.org/olympics/located%20in%20the%20administrative%20territorial%20entity>
+    "located in the administrative territorial entity";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/ville%20de%20Paris> .
+
+_:row__13 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 6;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=7>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/Invalides>, _:bnode__14 .
+
+<http://example.org/olympics/Invalides> a <http://example.org/olympics#Olympics> .
+
+_:bnode__14 <http://example.org/olympics/located%20in%20the%20administrative%20territorial%20entity>
+    "located in the administrative territorial entity";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/ville%20de%20Paris> .
+
+_:row__15 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 7;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=8>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/place%20de%20la%20Concorde>,
+    _:bnode__16 .
+
+<http://example.org/olympics/place%20de%20la%20Concorde> a <http://example.org/olympics#Olympics> .
+
+_:bnode__16 <http://example.org/olympics/located%20in%20the%20administrative%20territorial%20entity>
+    "located in the administrative territorial entity";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/ville%20de%20Paris> .
+
+_:row__17 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 8;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=9>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/Grand%20Palais>,
+    _:bnode__18 .
+
+<http://example.org/olympics/Grand%20Palais> a <http://example.org/olympics#Olympics> .
+
+_:bnode__18 <http://example.org/olympics/located%20in%20the%20administrative%20territorial%20entity>
+    "located in the administrative territorial entity";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/ville%20de%20Paris> .
+
+_:row__19 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 9;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=10>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/Novak%20Djokovic>,
+    _:bnode__20 .
+
+<http://example.org/olympics/Novak%20Djokovic> a <http://example.org/olympics#Olympics> .
+
+_:bnode__20 <http://example.org/olympics/sport> "sport";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/tennis> .
+
+_:row__21 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 10;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=11>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/Letsile%20Tebogo>,
+    _:bnode__22 .
+
+<http://example.org/olympics/Letsile%20Tebogo> a <http://example.org/olympics#Olympics> .
+
+_:bnode__22 <http://example.org/olympics/sport> "sport";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/tennis> .
+
+_:row__23 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 11;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=12>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/Sainte-Lucie%20Julien%20Alfred>,
+    _:bnode__24 .
+
+<http://example.org/olympics/Sainte-Lucie%20Julien%20Alfred> a <http://example.org/olympics#Olympics> .
+
+_:bnode__24 <http://example.org/olympics/sport> "sport";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/tennis> .
+
+_:row__25 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 12;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=13>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/Thea%20LaFond>,
+    _:bnode__26 .
+
+<http://example.org/olympics/Thea%20LaFond> a <http://example.org/olympics#Olympics> .
+
+_:bnode__26 <http://example.org/olympics/sport> "sport";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/tennis> .
+
+_:row__27 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 13;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=14>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/d%C3%A9l%C3%A9gation%20fran%C3%A7aise>,
+    _:bnode__28 .
+
+<http://example.org/olympics/d%C3%A9l%C3%A9gation%20fran%C3%A7aise> a <http://example.org/olympics#Olympics> .
+
+_:bnode__28 <http://example.org/olympics/part%20of> "part of";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/monde%20entier> .
+
+_:row__29 a <http://www.w3.org/ns/csvw#Row>;
+  <http://www.w3.org/ns/csvw#rownum> 14;
+  <http://www.w3.org/ns/csvw#url> <file:/data/extracted_triplets.csv#row=15>;
+  <http://www.w3.org/ns/csvw#describes> <http://example.org/olympics/monde%20entier>,
+    _:bnode__30 .
+
+<http://example.org/olympics/monde%20entier> a <http://example.org/olympics#Olympics> .
+
+_:bnode__30 <http://example.org/olympics/has%20part> "has part";
+  <file:/data/extracted_triplets.csv#object_name> <http://example.org/olympics/d%C3%A9l%C3%A9gation%20fran%C3%A7aise> .

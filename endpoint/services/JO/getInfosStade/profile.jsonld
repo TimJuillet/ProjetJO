@@ -1,0 +1,43 @@
+{
+  "@context": {
+    "@base": "http://ns.inria.fr/sparql-micro-service/item/",
+    "@vocab": "http://example.org/schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "geo": "http://www.w3.org/2003/01/geo/wgs84_pos#",
+    "stadium": {
+      "@id": "rdf:type",
+      "@type": "@id",
+      "@value": "http://example.org/schema#Stadium"
+    },
+    "coordonnees": {
+      "@type": "@id",
+      "lat": {
+        "@id": "http://example.org/schema#equip_y",
+        "@type": "xsd:double"
+      },
+      "lon": {
+        "@id": "http://example.org/schema#equip_x",
+        "@type": "xsd:double"
+      }
+    },
+    "equip_trib_nb": {
+      "@id": "nb_places",
+      "@type": "xsd:integer"
+    },
+    "equip_nom": {
+      "@id": "description",
+      "@container": "@set"
+    },
+    "inst_nom": {
+      "@id": "name",
+      "@type": "xsd:string"
+    },
+    "_id": {
+      "@id": "@id",
+      "@type": "@id",
+      "@container": "@set"
+    }
+  },
+  "@id": "venue/{inst_nom}_{equip_nom}_{equip_trib_nb}"
+}

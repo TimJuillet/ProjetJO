@@ -1,0 +1,24 @@
+2025-01-25 16:12:53 ["6vlfm9gpcb83d"] Context NOTICE: --------- Starting SPARQL micro-service --------
+2025-01-25 16:12:53 ["6vlfm9gpcb83d"] service NOTICE: Query parameter (html special chars encoded) 'service': JO/getInfosStade
+2025-01-25 16:12:53 ["6vlfm9gpcb83d"] service NOTICE: Query parameter (html special chars encoded) 'querymode': sparql
+2025-01-25 16:12:53 ["6vlfm9gpcb83d"] Utils NOTICE: Query HTTP header "Content-Type" undefined.
+2025-01-25 16:12:53 ["6vlfm9gpcb83d"] Utils NOTICE: Query HTTP header "Accept": application/sparql-results+json
+2025-01-25 16:12:53 ["6vlfm9gpcb83d"] service NOTICE: Client SPARQL query (html special chars encoded):
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
+PREFIX ex: &lt;http://example.org/schema#&gt;
+PREFIX geo: &lt;http://www.w3.org/2003/01/geo/wgs84_pos#&gt;
+
+select * where {
+  ?x ?y ?z .
+}
+2025-01-25 16:12:53 ["6vlfm9gpcb83d"] service NOTICE: Will query the Web API with arguments: Array
+(
+    [name] => STADE DE FRANCE
+)
+
+2025-01-25 16:12:53 ["6vlfm9gpcb83d"] service NOTICE: Web API query string: https://equipements.sports.gouv.fr/api/explore/v2.1/catalog/datasets/data-es/records?where=inst_nom=%22STADE%20DE%20FRANCE%22
+2025-01-25 16:12:54 ["6vlfm9gpcb83d"] service NOTICE: Executing SPARQL CONSTRUCT query from file: /services/JO/getInfosStade/construct.sparql
+2025-01-25 16:12:54 ["6vlfm9gpcb83d"] service NOTICE: Evaluating client SPARQL query against temporary graph...
+2025-01-25 16:12:55 ["6vlfm9gpcb83d"] service NOTICE: Sending response with Content-Type: application/sparql-results+json
+2025-01-25 16:12:55 ["6vlfm9gpcb83d"] service NOTICE: --------- Done - SPARQL ÂµS execution --------

@@ -1,0 +1,25 @@
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+CONSTRUCT {
+  ?pokemon rdf:type <http://dbpedia.org/ontology/Pokemon> .
+  ?pokemon dbp:hasType ?typeName .
+  ?pokemon dbp:hasMove ?moveName .
+  ?pokemon dbp:hasAbility ?abilityName .
+}
+WHERE {
+  # Identifier les types des Pokémon
+  ?pokemon dbp:hasTypes ?typeBlankNode .
+  ?typeBlankNode dbp:hasType ?typeDetails .
+  ?typeDetails dbp:name ?typeName .
+
+  # Identifier les moves des Pokémon
+  ?pokemon dbp:hasMoves ?moveBlankNode .
+  ?moveBlankNode dbp:hasMove ?moveDetails .
+  ?moveDetails dbp:name ?moveName .
+
+  # Identifier les abilities des Pokémon
+  ?pokemon dbp:hasAbilities ?abilityBlankNode .
+  ?abilityBlankNode dbp:hasAbility ?abilityDetails .
+  ?abilityDetails dbp:name ?abilityName .
+}

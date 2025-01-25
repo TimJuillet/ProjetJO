@@ -1,0 +1,22 @@
+[
+  {
+    "head":"Paris",
+    "type":"country",
+    "tail":"France"
+  },
+  {
+    "head":"France",
+    "type":"capital",
+    "tail":"Paris"
+  },
+  {
+    "head":"France",
+    "type":"capital",
+    "tail":"Paris"
+  },
+  {
+    "head":"Paris",
+    "type":"country",
+    "tail":"France"
+  }
+]

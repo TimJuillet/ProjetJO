@@ -1,0 +1,64 @@
+@prefix olympics: <http://example.org/olympics#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+olympics:champ_de_mars a olympics:City ;
+    rdfs:label "Champ-de-Mars" ;
+    olympics:hasCity olympics:ville_de_paris .
+
+olympics:grand_palais a olympics:City ;
+    rdfs:label "Grand Palais" ;
+    olympics:hasCity olympics:ville_de_paris .
+
+olympics:invalides a olympics:City ;
+    rdfs:label "Invalides" ;
+    olympics:hasCity olympics:ville_de_paris .
+
+olympics:jeux_olympiques_dété_de_2024 rdfs:label "Jeux olympiques d'été de 2024" ;
+    olympics:startDate olympics:2024 .
+
+olympics:letsile_tebogo a olympics:Athlete ;
+    rdfs:label "Letsile Tebogo" ;
+    olympics:belongsToDiscipline olympics:tennis ;
+    olympics:isDisabled false .
+
+olympics:novak_djokovic a olympics:Athlete ;
+    rdfs:label "Novak Djokovic" ;
+    olympics:belongsToDiscipline olympics:tennis ;
+    olympics:isDisabled false .
+
+olympics:place_de_la_concorde a olympics:City ;
+    rdfs:label "place de la Concorde" ;
+    olympics:hasCity olympics:ville_de_paris .
+
+olympics:sainte_lucie_julien_alfred rdfs:label "Sainte-Lucie Julien Alfred" ;
+    olympics:belongsToDiscipline olympics:tennis .
+
+olympics:thea_lafond a olympics:Athlete ;
+    rdfs:label "Thea LaFond" ;
+    olympics:belongsToDiscipline olympics:tennis ;
+    olympics:isDisabled false .
+
+olympics:tour_eiffel a olympics:City ;
+    rdfs:label "tour Eiffel" ;
+    olympics:hasCity olympics:ville_de_paris .
+
+olympics:trocadéro a olympics:City ;
+    rdfs:label "Trocadéro" ;
+    olympics:hasCity olympics:ville_de_paris .
+
+olympics:2024 rdfs:label "2024" .
+
+olympics:délégation_française a olympics:Team ;
+    rdfs:label "délégation française" ;
+    olympics:isPartOfTeam olympics:monde_entier .
+
+olympics:monde_entier rdfs:label "monde entier" ;
+    olympics:hasTeam olympics:délégation_française .
+
+olympics:tennis a olympics:Discipline ;
+    rdfs:label "tennis" .
+
+olympics:ville_de_paris a olympics:City ;
+    rdfs:label "ville de Paris" .
+

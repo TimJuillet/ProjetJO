@@ -1,0 +1,26 @@
+{
+  "@context": {
+    "@vocab": "http://dbpedia.org/property/",
+    "types": {
+      "@id": "hasTypes"
+    },
+    "type": {
+      "@id": "hasType",
+      "@type": "@id"
+    },
+    "moves": {
+      "@id": "hasMoves"
+    },
+    "move": {
+      "@id": "hasMove",
+      "@type": "@id"
+    },
+    "abilities": {
+      "@id": "hasAbilities"
+    },
+    "ability": {
+      "@id": "hasAbility",
+      "@type": "@id"
+    }
+  }
+}

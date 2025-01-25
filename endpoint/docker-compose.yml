@@ -1,0 +1,38 @@
+version: '3.2'
+services:
+  corese:
+    container_name: corese4sms
+    image: frmichel/corese4sms:v4.4.1
+    platform: linux/amd64  # Ajout de cette ligne
+    networks:
+      - sms-net
+    volumes:
+      - "./logs:/usr/local/corese/log"
+      - "./services:/services"
+      - "./config:/usr/local/corese/config"
+
+  mongo:
+    container_name: mongodb
+    image: mongo:4.4.6
+    networks:
+      - sms-net
+
+  sparql-micro-service:
+    container_name: sparql-micro-service
+    image: frmichel/sparql-micro-service:v0.5.8
+    platform: linux/amd64  # Ajout de cette ligne car je suis sur macOS hihihi ^^
+    networks:
+      - sms-net
+    ports:
+      - "80:80"
+    volumes:
+      - "./logs:/var/www/sparql-ms/logs"
+      - "./services:/services"
+      - "./html:/var/www/html"
+      - type: bind
+        source: ./config/sparql-micro-service.ini
+        target: /var/www/sparql-ms/src/sparqlms/config.ini
+
+networks:
+  sms-net:
+    driver: bridge
