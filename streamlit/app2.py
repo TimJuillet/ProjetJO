@@ -23,7 +23,7 @@ OLYMPICS = Namespace("http://example.org/olympics#")
 
 @st.cache_resource
 def load_graph():
-    """Charge les données RDF depuis les fichiers Turtle avec gestion d'erreurs améliorée"""
+    """Charge les données RDF des JO depuis les deux fichiers TTL"""
     g = CustomGraph()
     
     # Bind des namespaces
@@ -33,8 +33,14 @@ def load_graph():
     g.bind('rdfs', RDFS)
     
     try:
-        # Charger les fichiers individuellement avec gestion d'erreurs
-        for file_path in ["../data/struct/olympic.ttl", "../data/data/output_og_24.ttl"]:
+        # Liste des fichiers à charger
+        files_to_load = [
+            "../data/data/output_og_24.ttl",
+            "../data/data/paris.ttl"
+        ]
+        
+        # Charger chaque fichier
+        for file_path in files_to_load:
             try:
                 g.parse(file_path, format="turtle")
                 st.sidebar.success(f"Fichier {file_path} chargé avec succès")
@@ -49,7 +55,7 @@ def load_graph():
         return None
 
 def execute_query(g, query):
-    """Exécute une requête SPARQL avec gestion des erreurs de date"""
+    """Exécute une requête SPARQL avec nettoyage et ordre correct des colonnes"""
     if g is None:
         st.error("Graphe non initialisé")
         return None
@@ -63,8 +69,24 @@ def execute_query(g, query):
         
         # Nettoyage des données
         for col in df.columns:
-            df[col] = df[col].apply(lambda x: str(x).split('#')[-1] if '#' in str(x) else x)
-                
+            # Nettoyer les noms de colonnes
+            new_col = col.split('/')[-1].replace('%20', ' ')
+            df.rename(columns={col: new_col}, inplace=True)
+            
+            # Nettoyer les valeurs
+            df[new_col] = df[new_col].apply(lambda x: (
+                str(x)
+                .split('#')[-1]  # Enlever la partie avant le #
+                .split('/')[-1]  # Enlever les chemins
+                .replace('%20', ' ')  # Remplacer %20 par espace
+                .replace('_at_time_', ' ')  # Nettoyer les timestamps
+                .replace('_', ' ')  # Remplacer underscore par espace
+            ))
+        
+        # Réorganiser les colonnes pour avoir x, y, z dans cet ordre
+        if set(['x', 'y', 'z']).issubset(df.columns):
+            df = df[['x', 'y', 'z']]
+
         return df
     except Exception as e:
         st.error(f"Erreur lors de l'exécution de la requête: {str(e)}")
