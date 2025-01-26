@@ -282,16 +282,6 @@ def main():
                     if item_choice == "Stades" and "lat" in results.columns and "lon" in results.columns:
                         create_map(results)
 
-                    # Métriques pour les stades
-                    if 'capacity' in results.columns:
-                        col1, col2, col3 = st.columns(3)
-                        with col1:
-                            st.metric("Nombre de sites", len(results))
-                        with col2:
-                            st.metric("Capacité totale", f"{results['capacity'].sum():,}")
-                        with col3:
-                            st.metric("Capacité moyenne", f"{int(results['capacity'].mean()):,}")
-
                     # Export des données
                     st.sidebar.download_button(
                         label="📥 Télécharger les résultats (CSV)",
