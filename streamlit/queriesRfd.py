@@ -6,7 +6,35 @@ STADES_QUERIES = {
             ?x ?y ?z
         }
     }
-    """
+    """,
+    "Événements par stade": """
+        PREFIX : <http://example.org/olympics#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        
+        SELECT DISTINCT ?stadium ?event ?discipline ?date ?capacity WHERE {
+            # Obtenir les informations du stade depuis le service
+            SERVICE <http://localhost/service/JO/getInfosStade?name=STADE DE FRANCE> {
+                ?stadeUri ?y ?z .
+                {
+                    ?stadeUri :name ?stadium ;
+                            :hasCapacity ?capacity .
+                }
+            }
+            
+            # Combiner avec les données des événements locaux
+            ?eventUri a :Event ;
+                    :name ?event ;
+                    :belongsToDiscipline ?discipline ;
+                    :isScheduledAtTime ?date ;
+                    :takesPlaceAt ?venueUri .
+            ?venueUri :name ?stadium .
+            
+            FILTER(?stadium = "STADE DE FRANCE")
+        }
+        ORDER BY ?date
+        """
 }
 
 EQUIPES_QUERIES = {

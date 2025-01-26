@@ -128,7 +128,8 @@ def load_graph():
     try:
         # Liste des fichiers à charger
         files = [
-            ("../data/data/output_og_24.ttl", "fichier des JO")        
+            ("../data/data/output_og_24.ttl", "fichier des JO"),
+            ("../data/data/simulate.ttl", "Pour Endpoint")        
             ]
         
         for file_path, description in files:
@@ -151,18 +152,14 @@ def execute_query(g, query):
         return None
         
     try:
-        # Vérifier si c'est une requête pour les stades
         if "SERVICE" in query:
             import re
-            # Extraire le nom du stade (entre name= et >)
             match = re.search(r'getInfosStade\?name=(.*?)>', query)
             if match:
                 stade_name = match.group(1)
                 
-                # Si le stade est vide, montrer une erreur
-                if not stade_name.strip():
-                    st.error("Veuillez entrer un nom de stade")
-                    return None
+                # Définir le format de sortie selon la requête
+                is_event_query = "Event" in query or "event" in query
                 
                 params = {
                     'query': """
@@ -190,51 +187,89 @@ def execute_query(g, query):
                     if not json_data['results']['bindings']:
                         st.warning(f"Aucun résultat trouvé pour le stade '{stade_name}'")
                         return pd.DataFrame()
-                    
-                    records = []
-                    current_record = {}
-                    
-                    for binding in json_data['results']['bindings']:
-                        x_value = binding['x']['value'].split('#')[-1]
-                        y_value = binding['y']['value'].split('#')[-1]
-                        z_value = binding['z']['value']
+
+                    if is_event_query:
+                        # Pour la requête des événements
+                        events_data = []
+                        stadium_info = {}
                         
-                        # Mapper les propriétés aux noms de colonnes
-                        if 'name' in y_value.lower():
-                            current_record['name'] = z_value
-                        elif 'capacity' in y_value.lower():
-                            current_record['capacity'] = int(z_value)
-                        elif 'description' in y_value.lower():
-                            current_record['description'] = z_value
-                        elif 'latitude' in y_value.lower():
-                            current_record['lat'] = float(z_value)
-                        elif 'longitude' in y_value.lower():
-                            current_record['lon'] = float(z_value)
+                        # D'abord extraire les infos du stade du service
+                        for binding in json_data['results']['bindings']:
+                            y_value = binding['y']['value'].split('#')[-1]
+                            z_value = binding['z']['value']
+                            
+                            if 'name' in y_value.lower():
+                                stadium_info['name'] = z_value
+                            elif 'capacity' in y_value.lower():
+                                stadium_info['capacity'] = int(z_value)
+
+                        # Ensuite exécuter la requête locale pour les événements
+                        local_query = """
+                        PREFIX : <http://example.org/olympics#>
+                        SELECT ?event ?discipline ?date WHERE {
+                            ?eventUri a :Event ;
+                                     :name ?event ;
+                                     :belongsToDiscipline ?discipline ;
+                                     :isScheduledAtTime ?date ;
+                                     :takesPlaceAt ?venueUri .
+                            ?venueUri :name ?stadiumName .
+                            FILTER(str(?stadiumName) = "%s")
+                        }
+                        ORDER BY ?date
+                        """ % stadium_info['name']
+
+                        local_results = g.query(local_query)
                         
-                        # Si nous avons des infos à sauvegarder
-                        if len(current_record) > 0 and 'name' in current_record:
-                            if current_record not in records:
-                                records.append(current_record.copy())
+                        # Combiner les résultats
+                        for row in local_results:
+                            events_data.append({
+                                'stadium': stadium_info['name'],
+                                'event': str(row[0]),
+                                'discipline': str(row[1]).split('#')[-1],
+                                'date': str(row[2]),
+                                'capacity': stadium_info['capacity']
+                            })
+                        
+                        return pd.DataFrame(events_data)
+                    else:
+                        # Pour les requêtes standard de stade
+                        records = []
+                        current_record = {}
+                        
+                        for binding in json_data['results']['bindings']:
+                            x_value = binding['x']['value'].split('#')[-1]
+                            y_value = binding['y']['value'].split('#')[-1]
+                            z_value = binding['z']['value']
+                            
+                            if 'name' in y_value.lower():
+                                current_record['name'] = z_value
+                            elif 'capacity' in y_value.lower():
+                                current_record['capacity'] = int(z_value)
+                            elif 'description' in y_value.lower():
+                                current_record['description'] = z_value
+                            elif 'latitude' in y_value.lower():
+                                current_record['lat'] = float(z_value)
+                            elif 'longitude' in y_value.lower():
+                                current_record['lon'] = float(z_value)
+                            
+                            if len(current_record) > 0 and 'name' in current_record:
+                                if current_record not in records:
+                                    records.append(current_record.copy())
+                        
+                        return pd.DataFrame(records)
                     
-                    return pd.DataFrame(records)
                 else:
                     st.error(f"Erreur lors de l'appel au service: {response.status_code}")
                     st.error(f"Réponse du service: {response.text}")
                     return None
         
-        # Pour les autres requêtes, comportement normal
+        # Pour les autres requêtes
         if "CONSTRUCT" in query:
             return g.query(query)
             
         results = g.query(query)
-        df = pd.DataFrame(results, columns=results.vars)
+        return pd.DataFrame(results, columns=results.vars)
         
-        # Nettoyage des valeurs
-        for col in df.columns:
-            if df[col].dtype == object:
-                df[col] = df[col].apply(lambda x: str(x).replace('%20', ' '))
-                
-        return df
     except Exception as e:
         st.error(f"Erreur lors de l'exécution de la requête: {str(e)}")
         import traceback
