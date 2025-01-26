@@ -1,115 +1,85 @@
 from rdflib import Graph, Namespace, Literal, URIRef
-from rdflib.namespace import RDF, RDFS, XSD, OWL
+from rdflib.namespace import RDF, RDFS, XSD
 import pandas as pd
 import re
 
 class OlympicsRDFConverter:
     def __init__(self):
-        # Initialize namespaces
         self.olympics = Namespace("http://example.org/olympics#")
         self.g = Graph()
         self.g.bind("olympics", self.olympics)
-        
-        # Initialize property mappings based on ontology
-        self.property_mappings = {
-            "located in the administrative territorial entity": self.olympics.hasCity,
-            "point in time": self.olympics.startDate,  # Using startDate for temporal information
-            "sport": self.olympics.belongsToDiscipline,
-            "part of": self.olympics.isPartOfTeam,
-            "has part": self.olympics.hasTeam
-        }
-        
-        # Initialize class mappings
-        self.class_mappings = {
-            "venue": self.olympics.Venue,
-            "city": self.olympics.City,
-            "athlete": self.olympics.Athlete,
-            "discipline": self.olympics.Discipline,
-            "team": self.olympics.Team
-        }
+        self.processed_triplets = set()
+        self.current_olympics = None
 
     def clean_text(self, text):
-        """Clean text for URI creation"""
-        # Convert to lowercase and replace spaces with underscores
         text = text.lower().strip()
         text = re.sub(r'[^\w\s-]', '', text)
         text = re.sub(r'[-\s]+', '_', text)
         return text
 
     def create_resource_uri(self, text, class_type=None):
-        """Create a proper URI for a resource"""
         clean_id = self.clean_text(text)
         uri = self.olympics[clean_id]
-        
-        # Add type information if provided
         if class_type:
             self.g.add((uri, RDF.type, class_type))
-            
-        # Add label
         self.g.add((uri, RDFS.label, Literal(text)))
-        
         return uri
 
-    def determine_resource_type(self, entity, relation):
-        """Determine the appropriate class type for an entity based on context"""
-        # Mapping rules based on relations and known entities
-        if "ville" in entity.lower() or relation == "located in the administrative territorial entity":
-            return self.olympics.City
-        elif any(sport in entity.lower() for sport in ["tennis", "football", "basketball"]):
-            return self.olympics.Discipline
-        elif "délégation" in entity.lower() or "team" in entity.lower():
-            return self.olympics.Team
-        elif re.match(r'^[A-Z][a-z]+ [A-Z][a-z]+', entity):  # Pattern for person names
-            return self.olympics.Athlete
-        elif any(venue in entity.lower() for venue in ["palais", "stade", "arena", "tour", "champ"]):
-            return self.olympics.Venue
-        return None
+    def get_olympics_uri(self, name):
+        # On utilise toujours le même URI pour les JO 2024
+        if "2024" in name:
+            if not self.current_olympics:
+                self.current_olympics = self.create_resource_uri(
+                    "Jeux olympiques d'été de 2024", self.olympics.Olympics)
+            return self.current_olympics
+        return self.create_resource_uri(name, self.olympics.Olympics)
+
+    def is_valid_triplet(self, head, relation, tail):
+        # Pour les JO 2024, on vérifie si on n'a pas déjà traité ce type de relation
+        if "2024" in head:
+            relation_key = (self.clean_text("Jeux olympiques d'été de 2024"), relation, tail.lower())
+            if relation_key in self.processed_triplets:
+                return False
+            self.processed_triplets.add(relation_key)
+            return True
+
+        # Pour les autres triplets, vérification simple des doublons
+        triplet_key = (head.lower(), relation, tail.lower())
+        if triplet_key in self.processed_triplets:
+            return False
+        self.processed_triplets.add(triplet_key)
+        return True
 
     def convert_triplets_to_rdf(self, csv_path):
-        """Convert extracted triplets to RDF following the ontology"""
-        # Read triplets
         df = pd.read_csv(csv_path)
         
         for _, row in df.iterrows():
-            head = row['head']
-            relation = row['type']
-            tail = row['tail']
+            head, relation, tail = row['head'], row['type'], row['tail']
             
-            # Determine classes for head and tail
-            head_type = self.determine_resource_type(head, relation)
-            tail_type = self.determine_resource_type(tail, relation)
-            
-            # Create URIs
-            head_uri = self.create_resource_uri(head, head_type)
-            tail_uri = self.create_resource_uri(tail, tail_type)
-            
-            # Get predicate from mapping or create new one
-            predicate = self.property_mappings.get(relation)
-            if not predicate:
-                # If no direct mapping exists, try to infer an appropriate property
-                if relation == "sport":
-                    # Create discipline and link it
-                    discipline_uri = self.create_resource_uri(tail, self.olympics.Discipline)
-                    self.g.add((head_uri, self.olympics.belongsToDiscipline, discipline_uri))
-                else:
-                    # Use default mapping
-                    predicate = self.olympics[self.clean_text(relation)]
-            
-            if predicate:
-                self.g.add((head_uri, predicate, tail_uri))
-                
-            # Add additional context based on ontology requirements
-            if head_type == self.olympics.Athlete:
-                # Add mandatory properties for athletes if not present
-                self.g.add((head_uri, self.olympics.isDisabled, Literal("false", datatype=XSD.boolean)))
-            elif head_type == self.olympics.Venue:
-                # Add mandatory city relationship for venues
-                if "Paris" in tail:
-                    paris_uri = self.create_resource_uri("Paris", self.olympics.City)
-                    self.g.add((head_uri, self.olympics.hasCity, paris_uri))
+            # Ignorer les Jeux d'été sans année
+            if head == "Jeux olympiques d'été":
+                continue
+
+            if not self.is_valid_triplet(head, relation, tail):
+                continue
+
+            if "Jeux olympiques" in head:
+                olympics_uri = self.get_olympics_uri(head)
+                if relation == "point in time":
+                    year = tail
+                    self.g.add((olympics_uri, self.olympics.startDate, 
+                              Literal(f"{year}-07-26", datatype=XSD.date)))
+                elif relation == "country":
+                    country_uri = self.create_resource_uri(tail, self.olympics.Country)
+                    self.g.add((olympics_uri, self.olympics.hostCountry, country_uri))
+
+            elif relation == "sport":
+                athlete_uri = self.create_resource_uri(head, self.olympics.Athlete)
+                discipline_uri = self.create_resource_uri(tail, self.olympics.Discipline)
+                self.g.add((athlete_uri, self.olympics.belongsToDiscipline, discipline_uri))
+                self.g.add((athlete_uri, self.olympics.isDisabled, Literal(False)))
 
     def save_rdf(self, output_path):
-        """Save the RDF graph to a file"""
         self.g.serialize(destination=output_path, format="turtle")
 
 def main():

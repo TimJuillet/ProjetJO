@@ -1,15 +1,19 @@
 head,type,tail
 Jeux olympiques d'été de 2024,point in time,2024
 Jeux olympiques d'été de 2024,point in time,2024
-Trocadéro,located in the administrative territorial entity,ville de Paris
-tour Eiffel,located in the administrative territorial entity,ville de Paris
-Champ-de-Mars,located in the administrative territorial entity,ville de Paris
-Invalides,located in the administrative territorial entity,ville de Paris
-place de la Concorde,located in the administrative territorial entity,ville de Paris
-Grand Palais,located in the administrative territorial entity,ville de Paris
+Jeux olympiques d'été de 2024,located in the administrative territorial entity,Paris
+Jeux olympiques d'été de 2024,country,France
+Paris,country,France
+France,capital,Paris
+Jeux olympiques d'été,organizer,Comité international olympique
+Jeux olympiques de 2020 de Tokyo,point in time,2020
+Jeux olympiques de 2020 de Tokyo,point in time,2020
+Île-de-France,contains administrative territorial entity,province
+province,located in the administrative territorial entity,Île-de-France
+Centre aquatique olympique,part of,Stade de France
+Stade de France,has part,Centre aquatique olympique
+Paris,located in or next to body of water,Seine
+Seine,located in the administrative territorial entity,Paris
 Novak Djokovic,sport,tennis
-Letsile Tebogo,sport,tennis
-Sainte-Lucie Julien Alfred,sport,tennis
-Thea LaFond,sport,tennis
 délégation française,part of,monde entier
 monde entier,has part,délégation française

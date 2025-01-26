@@ -1,0 +1,101 @@
+@prefix olympics: <http://example.org/olympics#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+olympics:jeux_olympiques_de_2020_de_tokyo a olympics:Olympics ;
+    rdfs:label "Jeux olympiques de 2020 de Tokyo" ;
+    olympics:startDate "2020-07-26"^^xsd:date .
+
+olympics:jeux_olympiques_dété_de_2024 a olympics:Olympics ;
+    rdfs:label "Jeux olympiques d'été de 2024" ;
+    olympics:endDate "2024-08-11"^^xsd:date ;
+    olympics:hasOfficialCity olympics:paris ;
+    olympics:hasTrial olympics:athletic_100m,
+        olympics:athletic_200m,
+        olympics:athletic_triple_jump,
+        olympics:judo_individual,
+        olympics:judo_team,
+        olympics:swimming_trial,
+        olympics:tennis_singles ;
+    olympics:hasVenue olympics:venue_paris ;
+    olympics:hostCountry olympics:france ;
+    olympics:season "Summer" ;
+    olympics:startDate "2024-07-26"^^xsd:date .
+
+olympics:novak_djokovic a olympics:Athlete ;
+    rdfs:label "Novak Djokovic" ;
+    olympics:belongsToDiscipline olympics:tennis ;
+    olympics:birthDate "1987-05-22"^^xsd:date ;
+    olympics:gender "Male" ;
+    olympics:hasNationality olympics:serbia ;
+    olympics:height 188 ;
+    olympics:isDisabled false ;
+    olympics:surname "Djokovic" ;
+    olympics:weight 77000 .
+
+olympics:athletic_100m a olympics:Trial ;
+    rdfs:label "Athletics 100m Sprint" ;
+    olympics:belongsToDiscipline olympics:athletics ;
+    olympics:isDisabled false ;
+    olympics:isTeamTrial false .
+
+olympics:athletic_200m a olympics:Trial ;
+    rdfs:label "Athletics 200m Sprint" ;
+    olympics:belongsToDiscipline olympics:athletics ;
+    olympics:isDisabled false ;
+    olympics:isTeamTrial false .
+
+olympics:athletic_triple_jump a olympics:Trial ;
+    rdfs:label "Athletics Triple Jump" ;
+    olympics:belongsToDiscipline olympics:athletics ;
+    olympics:isDisabled false ;
+    olympics:isTeamTrial false .
+
+olympics:france a olympics:Country ;
+    rdfs:label "France" .
+
+olympics:judo_individual a olympics:Trial ;
+    rdfs:label "Judo Individual" ;
+    olympics:belongsToDiscipline olympics:judo ;
+    olympics:isDisabled false ;
+    olympics:isTeamTrial false .
+
+olympics:judo_team a olympics:Trial ;
+    rdfs:label "Judo Team Mixed" ;
+    olympics:belongsToDiscipline olympics:judo ;
+    olympics:isDisabled false ;
+    olympics:isTeamTrial true .
+
+olympics:paris a olympics:City ;
+    rdfs:label "Paris" .
+
+olympics:serbia a olympics:Country ;
+    rdfs:label "Serbia" .
+
+olympics:swimming a olympics:Discipline ;
+    rdfs:label "Swimming" .
+
+olympics:swimming_trial a olympics:Trial ;
+    rdfs:label "Swimming Competition" ;
+    olympics:belongsToDiscipline olympics:swimming ;
+    olympics:isDisabled false ;
+    olympics:isTeamTrial false .
+
+olympics:tennis_singles a olympics:Trial ;
+    rdfs:label "Tennis Singles" ;
+    olympics:belongsToDiscipline olympics:tennis ;
+    olympics:isDisabled false ;
+    olympics:isTeamTrial false .
+
+olympics:venue_paris a olympics:Venue ;
+    rdfs:label "Main Venue Paris" .
+
+olympics:judo a olympics:Discipline ;
+    rdfs:label "Judo" .
+
+olympics:tennis a olympics:Discipline ;
+    rdfs:label "Tennis" .
+
+olympics:athletics a olympics:Discipline ;
+    rdfs:label "Athletics" .
+

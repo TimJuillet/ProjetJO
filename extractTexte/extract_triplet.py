@@ -108,8 +108,8 @@ def main():
     # Example usage
     extractor = TripletExtractor()
     
-    input_file = "text.txt"  # Your input text file
-    output_file = "extracted_triplets.csv"  # Output CSV file
+    input_file = "text.txt"  
+    output_file = "extracted_triplets.csv" 
     
     try:
         extractor.process_text_file(input_file, output_file)
