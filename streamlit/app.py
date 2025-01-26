@@ -154,39 +154,43 @@ def execute_query(g, query):
         # Vérifier si c'est une requête pour les stades
         if "SERVICE" in query:
             import re
-            
             # Extraire le nom du stade (entre name= et >)
             match = re.search(r'getInfosStade\?name=(.*?)>', query)
             if match:
                 stade_name = match.group(1)
                 
-                # Ne pas utiliser quote() car les paramètres requests seront déjà encodés
+                # Si le stade est vide, montrer une erreur
+                if not stade_name.strip():
+                    st.error("Veuillez entrer un nom de stade")
+                    return None
+                
                 params = {
                     'query': """
                     SELECT DISTINCT * WHERE {
                         ?x ?y ?z
                     }
                     """,
-                    'name': stade_name,  # Le nom tel quel, requests fera l'encodage
+                    'name': stade_name,
                     'querymode': 'sparql'
                 }
                 
-                # Headers pour spécifier que nous attendons du JSON
                 headers = {
                     'Accept': 'application/sparql-results+json'
                 }
                 
-                # Faire l'appel HTTP au service
                 response = requests.get(
                     "http://localhost/service/JO/getInfosStade",
                     params=params,
                     headers=headers
                 )
-                                
+                
                 if response.status_code == 200:
                     json_data = response.json()
                     
-                    # Transformer la réponse JSON en DataFrame
+                    if not json_data['results']['bindings']:
+                        st.warning(f"Aucun résultat trouvé pour le stade '{stade_name}'")
+                        return pd.DataFrame()
+                    
                     records = []
                     current_record = {}
                     
@@ -207,7 +211,7 @@ def execute_query(g, query):
                         elif 'longitude' in y_value.lower():
                             current_record['lon'] = float(z_value)
                         
-                        # Si nous avons toutes les infos nécessaires
+                        # Si nous avons des infos à sauvegarder
                         if len(current_record) > 0 and 'name' in current_record:
                             if current_record not in records:
                                 records.append(current_record.copy())
@@ -217,15 +221,15 @@ def execute_query(g, query):
                     st.error(f"Erreur lors de l'appel au service: {response.status_code}")
                     st.error(f"Réponse du service: {response.text}")
                     return None
-                    
-        # Pour les autres requêtes, utiliser le comportement normal
+        
+        # Pour les autres requêtes, comportement normal
         if "CONSTRUCT" in query:
             return g.query(query)
-        
+            
         results = g.query(query)
         df = pd.DataFrame(results, columns=results.vars)
         
-        # Nettoyage des valeurs si nécessaire
+        # Nettoyage des valeurs
         for col in df.columns:
             if df[col].dtype == object:
                 df[col] = df[col].apply(lambda x: str(x).replace('%20', ' '))
@@ -238,60 +242,77 @@ def execute_query(g, query):
         return None
 
 def main():
-    st.title("🏅 Explorateur SPARQL - JO Paris 2024")
-    
-    try:
-        # Chargement du graphe
-        g = load_graph()
-        st.sidebar.success("Données chargées avec succès!")
-    except Exception as e:
-        st.sidebar.error(f"Erreur lors du chargement des données: {str(e)}")
-        return
+   st.title("🏅 Explorateur SPARQL - JO Paris 2024")
+   
+   try:
+       # Chargement du graphe
+       g = load_graph()
+       st.sidebar.success("Données chargées avec succès!")
+   except Exception as e:
+       st.sidebar.error(f"Erreur lors du chargement des données: {str(e)}")
+       return
 
-    # Sidebar pour la sélection des requêtes
-    st.sidebar.title("Navigation")
-    
-    # Dropdown pour les thèmes
-    item_choice = st.sidebar.selectbox(
-        "Choisissez un thème préenregistré",
-        ["Stades", "Equipes", "Medailles", "Athletes", "Disciplines", "Visualisation"]
-    )
+   # Sidebar pour la sélection des requêtes
+   st.sidebar.title("Navigation")
+   
+   # Dropdown pour les thèmes
+   item_choice = st.sidebar.selectbox(
+       "Choisissez un thème préenregistré",
+       ["Stades", "Equipes", "Medailles", "Athletes", "Disciplines", "Visualisation"]
+   )
 
-    if item_choice != None:
-        st.write(f"Liste des requêtes pour : {item_choice}")
-        query_choice = st.sidebar.radio(
-            "Choisissez une requête pré-enregistrée",
-            list(query_mapping.get(item_choice).keys())
-        )
+   # Variable pour stocker le nom du stade
+   stade_name = None
 
-        with st.expander("Voir la requête SPARQL"):
-            st.code(query_mapping.get(item_choice)[query_choice], language="sparql")
+   if item_choice == "Stades":
+       # Ajout d'un champ pour le nom du stade
+       stade_name = st.sidebar.text_input("Rechercher un stade", "STADE DE FRANCE")
+   
+   if item_choice != None:
+       st.write(f"Liste des requêtes pour : {item_choice}")
+       query_choice = st.sidebar.radio(
+           "Choisissez une requête pré-enregistrée",
+           list(query_mapping.get(item_choice).keys())
+       )
 
-        try:
-            results = execute_query(g, query_mapping.get(item_choice)[query_choice])
+       with st.expander("Voir la requête SPARQL"):
+           base_query = query_mapping.get(item_choice)[query_choice]
+           if item_choice == "Stades" and stade_name:
+               # Remplacer le nom du stade dans la requête
+               query = base_query.replace("STADE DE FRANCE", stade_name)
+               st.code(query, language="sparql")
+           else:
+               st.code(base_query, language="sparql")
 
-            # Traitement spécial pour la visualisation
-            if item_choice == "Visualisation":
-                create_graph_visualization(results)
-            else:
-                # Affichage standard des résultats
-                if isinstance(results, pd.DataFrame) and not results.empty:
-                    st.dataframe(results, use_container_width=True)
+       try:
+           results = None
+           if item_choice == "Stades" and stade_name:
+               results = execute_query(g, query)
+           else:
+               results = execute_query(g, base_query)
 
-                    # Affichage de la carte pour les requêtes de stades avec coordonnées
-                    if item_choice == "Stades" and "lat" in results.columns and "lon" in results.columns:
-                        create_map(results)
+           # Traitement spécial pour la visualisation
+           if item_choice == "Visualisation":
+               create_graph_visualization(results)
+           else:
+               # Affichage standard des résultats
+               if isinstance(results, pd.DataFrame) and not results.empty:
+                   st.dataframe(results, use_container_width=True)
 
-                    # Export des données
-                    st.sidebar.download_button(
-                        label="📥 Télécharger les résultats (CSV)",
-                        data=results.to_csv(index=False).encode('utf-8'),
-                        file_name=f"jo_paris_2024_{query_choice.lower().replace(' ', '_')}.csv",
-                        mime="text/csv"
-                    )
+                   # Affichage de la carte pour les requêtes de stades avec coordonnées
+                   if item_choice == "Stades" and "lat" in results.columns and "lon" in results.columns:
+                       create_map(results)
 
-        except Exception as e:
-            st.error(f"Erreur lors de l'exécution de la requête: {str(e)}")
+                   # Export des données
+                   st.sidebar.download_button(
+                       label="📥 Télécharger les résultats (CSV)",
+                       data=results.to_csv(index=False).encode('utf-8'),
+                       file_name=f"jo_paris_2024_{query_choice.lower().replace(' ', '_')}.csv",
+                       mime="text/csv"
+                   )
+
+       except Exception as e:
+           st.error(f"Erreur lors de l'exécution de la requête: {str(e)}")
 
 if __name__ == "__main__":
-    main()
+   main()
