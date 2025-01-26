@@ -240,7 +240,7 @@ class ConstructRDF:
         if hostCountry:
             operation((olympic_uri, self.EX["hostCountry"], URIRef(self.EX[hostCountry])))
         if season:
-            operation((olympic_uri, self.EX["season"], URIRef(self.EX[season])))
+            operation((olympic_uri, self.EX["season"], Literal(season, datatype=XSD.string)))
         if hasOfficialCity:
             operation((olympic_uri, self.EX["hasOfficialCity"], URIRef(self.EX[hasOfficialCity])))
         if hasTrial:

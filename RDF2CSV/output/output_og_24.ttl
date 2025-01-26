@@ -27147,7 +27147,7 @@
         :Women_08_10_2024_at_time_00h00,
         :Women_08_11_2024_at_time_00h00,
         :Women_30_07_2024_at_time_00h00 ;
-    :season :Summer ;
+    :season "Summer"^^xsd:string ;
     :startDate "2024-07-26"^^xsd:date .
 
 :Silver a :Medal ;
