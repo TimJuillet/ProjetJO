@@ -145,12 +145,80 @@ def load_graph():
         return None
 
 def execute_query(g, query):
-    """Exécute une requête SPARQL avec nettoyage des résultats"""
+    """Exécute une requête SPARQL avec gestion des appels service"""
     if g is None:
         st.error("Graphe non initialisé")
         return None
         
     try:
+        # Vérifier si c'est une requête pour les stades
+        if "SERVICE" in query:
+            import re
+            
+            # Extraire le nom du stade (entre name= et >)
+            match = re.search(r'getInfosStade\?name=(.*?)>', query)
+            if match:
+                stade_name = match.group(1)
+                
+                # Ne pas utiliser quote() car les paramètres requests seront déjà encodés
+                params = {
+                    'query': """
+                    SELECT DISTINCT * WHERE {
+                        ?x ?y ?z
+                    }
+                    """,
+                    'name': stade_name,  # Le nom tel quel, requests fera l'encodage
+                    'querymode': 'sparql'
+                }
+                
+                # Headers pour spécifier que nous attendons du JSON
+                headers = {
+                    'Accept': 'application/sparql-results+json'
+                }
+                
+                # Faire l'appel HTTP au service
+                response = requests.get(
+                    "http://localhost/service/JO/getInfosStade",
+                    params=params,
+                    headers=headers
+                )
+                                
+                if response.status_code == 200:
+                    json_data = response.json()
+                    
+                    # Transformer la réponse JSON en DataFrame
+                    records = []
+                    current_record = {}
+                    
+                    for binding in json_data['results']['bindings']:
+                        x_value = binding['x']['value'].split('#')[-1]
+                        y_value = binding['y']['value'].split('#')[-1]
+                        z_value = binding['z']['value']
+                        
+                        # Mapper les propriétés aux noms de colonnes
+                        if 'name' in y_value.lower():
+                            current_record['name'] = z_value
+                        elif 'capacity' in y_value.lower():
+                            current_record['capacity'] = int(z_value)
+                        elif 'description' in y_value.lower():
+                            current_record['description'] = z_value
+                        elif 'latitude' in y_value.lower():
+                            current_record['lat'] = float(z_value)
+                        elif 'longitude' in y_value.lower():
+                            current_record['lon'] = float(z_value)
+                        
+                        # Si nous avons toutes les infos nécessaires
+                        if len(current_record) > 0 and 'name' in current_record:
+                            if current_record not in records:
+                                records.append(current_record.copy())
+                    
+                    return pd.DataFrame(records)
+                else:
+                    st.error(f"Erreur lors de l'appel au service: {response.status_code}")
+                    st.error(f"Réponse du service: {response.text}")
+                    return None
+                    
+        # Pour les autres requêtes, utiliser le comportement normal
         if "CONSTRUCT" in query:
             return g.query(query)
         
@@ -159,12 +227,14 @@ def execute_query(g, query):
         
         # Nettoyage des valeurs si nécessaire
         for col in df.columns:
-            if df[col].dtype == object:  # Seulement pour les colonnes de type objet/string
+            if df[col].dtype == object:
                 df[col] = df[col].apply(lambda x: str(x).replace('%20', ' '))
                 
         return df
     except Exception as e:
         st.error(f"Erreur lors de l'exécution de la requête: {str(e)}")
+        import traceback
+        st.error(f"Détails de l'erreur: {traceback.format_exc()}")
         return None
 
 def main():
