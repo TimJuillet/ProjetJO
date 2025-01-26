@@ -1,0 +1,114 @@
+@prefix : <http://example.org/olympics#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:10m%20Air%20Pistol%20Mixed%20TeamIndia_team a :Team ;
+    :description "Team of India in 10m%20Air%20Pistol%20Mixed%20Team"^^xsd:string ;
+    :name "10m%20Air%20Pistol%20Mixed%20Team India team"^^xsd:string ;
+    :represent :India .
+
+:10m%20Air%20Pistol%20Mixed%20TeamSerbia_team a :Team ;
+    :description "Team of Serbia in 10m%20Air%20Pistol%20Mixed%20Team"^^xsd:string ;
+    :name "10m%20Air%20Pistol%20Mixed%20Team Serbia team"^^xsd:string ;
+    :represent :Serbia .
+
+:10m%20Air%20Pistol%20Mixed%20TeamTürkiye_team a :Team ;
+    :description "Team of Türkiye in 10m%20Air%20Pistol%20Mixed%20Team"^^xsd:string ;
+    :name "10m%20Air%20Pistol%20Mixed%20Team Türkiye team"^^xsd:string ;
+    :represent :Türkiye .
+
+:10m%20Air%20Pistol%20Men_Federico%20Nilo%20MALDINI_28_07_2024_at_time_00h00 a :Performance ;
+    :awarded :Silver ;
+    :description "Performance of Federico Nilo MALDINI in 10m Air Pistol Men at the Silver Medal on 28_07_2024_at_time_00h00"^^xsd:string ;
+    :hasEvent :10m%20Air%20Pistol%20Men ;
+    :hasResult "-1"^^xsd:string ;
+    :hasResultUnit :blank_unit ;
+    :isScheduledAtTime "2024-07-28T00:00:00+00:00"^^xsd:dateTime ;
+    :name "Silver Medal 10m Air Pistol Men Federico Nilo MALDINI 28_07_2024_at_time_00h00"^^xsd:string ;
+    :playedBy :Federico%20Nilo%20MALDINI ;
+    :rank "2"^^xsd:string .
+
+:10m%20Air%20Pistol%20Men_28_07_2024_at_time_00h00 a :Event ;
+    :belongToOlympics :2024_Summer_Olympics ;
+    :belongsToTrial :10m%20Air%20Pistol%20Men ;
+    :description "Event 10m Air Pistol Men on 28_07_2024_at_time_00h00"^^xsd:string ;
+    :eventHasPerformance :10m%20Air%20Pistol%20Men_Federico%20Nilo%20MALDINI_28_07_2024_at_time_00h00,
+        :10m%20Air%20Pistol%20Men_Paolo%20MONNA_28_07_2024_at_time_00h00,
+        :10m%20Air%20Pistol%20Men_XIE%20Yu_28_07_2024_at_time_00h00 ;
+    :hasDate "2024-07-28T00:00:00+00:00"^^xsd:dateTime ;
+    :name "10m Air Pistol Men 28_07_2024_at_time_00h00"^^xsd:string .
+
+Event <-> Performance -> Trial -> descipline 
+Event -> Trial
+Olympic -> Event 
+
+:10m%20Air%20Pistol%20Men a :Trial ;
+    :belongsToDiscipline :Shooting ;
+    :description "https://olympics.com/en/paris-2024/results/shooting/10m-air-pistol-men/fnl-000100--"^^xsd:string ;
+    :name "10m%20Air%20Pistol%20Men"^^xsd:string .
+
+:Federico%20Nilo%20MALDINI a :Athlete ;
+    :isPersonOf :Federico%20Nilo%20MALDINI_person ;
+    :represent :Italy .
+
+:Federico%20Nilo%20MALDINI_person a :Person ;
+    :birthDate "1900-01-01"^^xsd:date ;
+    :gender "Male"^^xsd:string ;
+    :hasNationality :Italy ;
+    :name "Federico"^^xsd:string ;
+    :surname "NILO MALDINI"^^xsd:string .
+
+:Shooting a :Discipline ;
+    :name "Shooting"^^xsd:string .
+
+:Italy a :Country ;
+    :Coordinate :blank_coordinate ;
+    :countryCode "ITA"^^xsd:string ;
+    :countryName "Italy"^^xsd:string .
+
+:Türkiye a :Country ;
+    :Coordinate :blank_coordinate ;
+    :countryCode "TUR"^^xsd:string ;
+    :countryName "Türkiye"^^xsd:string .
+
+:India a :Country ;
+    :Coordinate :blank_coordinate ;
+    :countryCode "IND"^^xsd:string ;
+    :countryName "India"^^xsd:string .
+
+:Serbia a :Country ;
+    :Coordinate :blank_coordinate ;
+    :countryCode "SRB"^^xsd:string ;
+    :countryName "Serbia"^^xsd:string .
+
+
+:2024_Summer_Olympics a :Olympics ;
+    :description "The 2024 Summer Olympics, officially known as the Games of the XXXIII Olympiad, and commonly known as Paris 2024, is a forthcoming international multi-sport event that is scheduled to take place from 26 July to 11 August 2024 in Paris, France."^^xsd:string ;
+    :endDate "2024-08-11"^^xsd:date ;
+    :hasOfficialCity :Paris ;
+    :hasTrial :10m%20Air%20Pistol%20Men,
+        :10m%20Air%20Pistol%20Mixed%20Team,
+        <http://example.org/olympics#Lightweight%20Men's%20Double%20Sculls>,
+        <http://example.org/olympics#Lightweight%20Women's%20Double%20Sculls>,
+        :Marathon%20Race%20Walk%20Relay%20Mixed,
+        <http://example.org/olympics#Men's%20+102kg>,
+        <http://example.org/olympics#Men's%20+92kg>,
+        <http://example.org/olympics#Men's%2010,000m>,
+        <http://example.org/olympics#Men's%20100m>,
+        <http://example.org/olympics#Women's%20Épée%20Team> ;
+    :hostCountry :France ;
+    :name "2024_Summer_Olympics"^^xsd:string ;
+    :olympicHasEvent :10m%20Air%20Pistol%20Men_28_07_2024_at_time_00h00,
+        :10m%20Air%20Pistol%20Mixed%20Team_30_07_2024_at_time_00h00,
+        :10m%20Air%20Pistol%20Women_28_07_2024_at_time_00h00,
+        <http://example.org/olympics#Lightweight%20Men's%20Double%20Sculls_08_02_2024_at_time_00h00>,
+        <http://example.org/olympics#Lightweight%20Women's%20Double%20Sculls_08_02_2024_at_time_00h00>,
+        :Marathon%20Race%20Walk%20Relay%20Mixed_08_07_2024_at_time_00h00,
+        :Women_30_07_2024_at_time_00h00 ;
+    :season :Summer ;
+    :startDate "2024-07-26"^^xsd:date .
+
+:Silver a :Medal ;
+    :name "Silver%20Medal"^^xsd:string .
+
+:Bronze a :Medal ;
+    :name "Bronze%20Medal"^^xsd:string .
