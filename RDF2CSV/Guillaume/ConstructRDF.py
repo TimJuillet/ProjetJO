@@ -76,6 +76,13 @@ class ConstructRDF:
         else:
             raise ValueError("Opération non valide. Utilisez 'set' ou 'add'.")
 
+    def checkIfURIExists(self, name):
+        uri = URIRef(self.EX[name])
+        if (uri, None, None) in self.g:
+            return True
+        else:
+            return False
+
     def createTeam(self, operation, teamWirtting, teamName, teamDescription, isDisabled, hasMember: list, represent):
         if teamWirtting in self.teams:
             return False

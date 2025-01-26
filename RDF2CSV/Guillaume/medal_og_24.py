@@ -77,7 +77,7 @@ def function_for_medal_og_24(reader, constructorRDF):
             constructorRDF.createTeam(globalOperation, teamWritting, teamName, teamDescription, BlankIsDisabled, hasMember, countryName)
         else :
             constructorRDF.createPerson(globalOperation, personWritting, nom, BlankHeight,
-                                    BlankWeight, BlankBirthDate, BlankDeathDate,
+                                    BlankWeight, BlankBirthDate, None,
                                     gender, countryName, BlankIsDisabled, prenom, None)
             constructorRDF.createAthlete(globalOperation, athleteName, None, personWritting, BlankIsDisabled, countryName)
 

@@ -37,15 +37,18 @@ from utils import \
 from ConstructRDF import ConstructRDF
 
 from medal_og_24 import function_for_medal_og_24
+from athlete_og_24 import function_for_athlete_og_24
 
 class CSV2RDF :
 
-    def __init__(self, data_path : str, output_path : str, csv_file : str, rdf_file : str, file_to_overwrite : list or str = None):
+    def __init__(self, data_path : str, output_path : str, csv_file : str, rdf_file : str, file_to_overwrite : list or str = None, csvFileEncoding : str = "utf-8"):
         self.data_path = data_path
         self.output_path = output_path
         self.csv_file = os.path.join(self.data_path, csv_file)
         self.rdf_file = os.path.join(self.output_path, rdf_file)
         self.file_to_overwrite = file_to_overwrite
+        self.csvFileEncoding = csvFileEncoding
+        self.newTurtleFile = False
         self.dictionnary_file_name = {
             "must": self.csv_file,
             "should": [
@@ -91,6 +94,7 @@ class CSV2RDF :
                 with open(should_file_path, 'w') as file:
                     file.write('{}')
                 print(f"The file '{should_file_name}' has been created in the data folder '{self.data_path}'.")
+                self.newTurtleFile = True
 
     def create_rdf(self, namespace : dict, callable_function : callable):
         """
@@ -102,13 +106,12 @@ class CSV2RDF :
         """
 
         g = Graph()
-        alreadyExist = check_and_create_file(self.rdf_file)
-        if alreadyExist:
+        if self.file_to_overwrite == None and self.newTurtleFile == False :
             g.parse(self.rdf_file, format="turtle")
         for prefix, uri in namespace.items():
             g.bind(prefix, uri[0])
 
-        with open(self.csv_file, encoding="utf-8-sig") as f:
+        with open(self.csv_file, encoding=self.csvFileEncoding) as f:
             callable_function(g, f, namespace, self.csv_file)
 
         g.serialize(destination=self.rdf_file, format="turtle")
@@ -118,16 +121,11 @@ def function_generate_rdf(g, f, namespace: dict, fileName: str):
     constructorRDF = ConstructRDF(g, namespace)
     reader = csv.DictReader(f, delimiter=';')
     constructorRDF.createCoordinate(ConstructRDF.SET_OPERATION, BlankCoordinateWritting, BlankCoordinateLongitude, BlankCoordinateLatitude, BlankCoordinateName, BlankCoordinateDescription)
-
-    if fileName == "medal_og_24.csv":
-        function_for_medal_og_24(reader, constructorRDF)
+    if fileName == "../data\medal_og_24.csv":
         print("Processing the file 'medal_og_24.csv'")
+        function_for_medal_og_24(reader, constructorRDF)
         return
-
-
-
-
-csv2rdf = CSV2RDF("../data", "../output", "medal_og_24.csv", "output_medal_og_24.ttl", None)
-#csv2rdf.generate_type_matrix_mapping("http://example.org/interactionWith", "http://example.org/")
-#csv2rdf.save_type_matrix_mapping()
-csv2rdf.create_rdf(namespace, function_generate_rdf)
+    if fileName == "../data\\athlete_og_24.csv":
+        print("Processing the file 'athlete_og_24.csv'")
+        function_for_athlete_og_24(reader, constructorRDF)
+        return

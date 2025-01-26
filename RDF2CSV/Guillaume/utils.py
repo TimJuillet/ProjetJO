@@ -1,8 +1,17 @@
 import json
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
+def addXDays(date_str, x : int):
+    date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+
+    # Ajouter un jour
+    new_date_obj = date_obj + timedelta(days=x)
+
+    # Convertir à nouveau en chaîne de caractères si besoin
+    new_date_str = new_date_obj.strftime("%Y-%m-%d")
+    return new_date_str
 
 def transformer_date(date_str):
     # Convertir la chaîne de date en objet datetime
@@ -48,6 +57,7 @@ def normalize_string(s):
 
 def capitalize_words(s):
     # Mettre en majuscule chaque début de mot
+    s = s.lower()
     return ' '.join(word.capitalize() for word in s.split())
 
 def check_and_create_file(file_path : str):
