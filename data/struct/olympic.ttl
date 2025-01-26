@@ -6,6 +6,9 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix schema: <http://schema.org/> .
 @prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
 
 :OlympicsOntology a owl:Ontology ;
     owl:versionInfo "1.0" ;
@@ -211,7 +214,7 @@
       owl:maxCardinality "1"^^xsd:nonNegativeInteger
    ] .
 
-:represent rdf:type owl :ObjectProperty ;
+:represent rdf:type owl:ObjectProperty ;
         rdfs:label "represent" ;
         rdfs:domain [ rdfs:Class :Athlete, :Team ] ;
         rdfs:range :Represent ;
@@ -225,7 +228,7 @@
 
 
 :Team rdf:type owl:Class ;
-        rdfs:subClassOf :_ParticipantEntities, _isDisabled, _DescriptionEntities ;
+        rdfs:subClassOf :_ParticipantEntities, :_isDisabled, :_DescriptionEntities ;
         owl:disjointWith :Athlete ;
         rdfs:label "Team" ;
         rdfs:comment "Represents a team participating in the Olympics." ;
@@ -342,8 +345,8 @@
         owl:equivalentClass schema:Person ;
         owl:disjointWith :Team ;
         rdfs:label "Person" ;
-        rdfs:comment "Represents a person." .
-        rdfs:subClassOf :_DescriptionEntities , _ObjectName, _isDisabled ,
+        rdfs:comment "Represents a person." ;
+        rdfs:subClassOf :_DescriptionEntities , :_ObjectName, :_isDisabled ,
         [ a owl:Restriction ;
                 owl:onProperty :surname ;
                 owl:minCardinality "1"^^xsd:nonNegativeInteger ;
@@ -521,7 +524,7 @@
 
     sh:closed true ;
     sh:ignoredProperties ( rdf:type rdfs:label ) ;
-    sh:message "The Person entity contains unexpected properties." ;
+    sh:message "The Person entity contains unexpected properties." .
 
 
 :Person a skos:Concept ;
@@ -545,7 +548,7 @@
     owl:disjointWith :Team ;
     rdfs:label "Athlete" ;
     rdfs:comment "Represents an athlete participating in the Olympics." ;
-    rdfs:subClassOf :_ParticipantEntities , Person ,
+    rdfs:subClassOf :_ParticipantEntities , :Person ,
     [ a owl:Restriction ;
         owl:onProperty :isPersonOf ;
         owl:minCardinality "1"^^xsd:nonNegativeInteger ;
@@ -669,7 +672,7 @@
         owl:hasKey ( :unitsInScientificDomain ) ;
         rdfs:label "Units" ;
         rdfs:comment "Represents the units of measurement for athlete attributes." ;
-        rdfs:subClassOf :_DescriptionEntities, _ObjectName,
+        rdfs:subClassOf :_DescriptionEntities, :_ObjectName,
         [
                 a owl:Restriction ;
                 owl:onProperty :unitsInScientificDomain ;
@@ -698,7 +701,7 @@
 
     sh:closed true ;
     sh:ignoredProperties ( rdf:type rdfs:label rdfs:comment ) ;
-    sh:message "The Units entity contains unexpected properties." ;
+    sh:message "The Units entity contains unexpected properties." .
 
 
 :Units a skos:Concept ;
@@ -721,7 +724,7 @@
 
 :Country rdf:type owl:Class ;
     owl:hasKey ( :hasCoordinate ) ;
-    rdfs:subClassOf :_GeoLocation, _ObjectCode , _DescriptionEntities, _ObjectName ;
+    rdfs:subClassOf :_GeoLocation, :_ObjectCode , :_DescriptionEntities, :_ObjectName ;
     rdfs:label "Country" ;
     rdfs:comment "Represents a country participating in the Olympics." .
 
@@ -751,7 +754,7 @@
         owl:hasKey ( :hasCoordinate ) ;
         rdfs:label "City" ;
         rdfs:comment "Represents a city hosting or accommodating Olympic events." ;
-        rdfs:subClassOf :_GeoLocation , _ObjectCode, _HasCountry, _DescriptionEntities, _ObjectName,
+        rdfs:subClassOf :_GeoLocation , :_ObjectCode, :_HasCountry, :_DescriptionEntities, :_ObjectName,
                 [
                         a owl:Restriction ;
                         owl:onProperty :hasCountry ;
@@ -793,7 +796,7 @@
         owl:equivalentClass dbpedia:Venue ;
         rdfs:label "Venue" ;
         rdfs:comment "Represents a venue for Olympic events." ;
-        rdfs:subClassOf :_GeoLocation , _HasCountry, _ObjectCode, _DescriptionEntities, _ObjectName,
+        rdfs:subClassOf :_GeoLocation , :_HasCountry, :_ObjectCode, :_DescriptionEntities, :_ObjectName,
                 [
                         a owl:Restriction ;
                         owl:onProperty :hasCity ;
@@ -810,7 +813,7 @@
 
 :hasCity rdf:type owl:ObjectProperty ;
         rdfs:label "has city" ;
-        rdfs:domain:Venue ;
+        rdfs:domain :Venue ;
         rdfs:range :City ;
         rdfs:comment "Specifies the city of a venue." .
 :hasCity a owl:FunctionalProperty .
@@ -861,7 +864,7 @@
                 }
             }
         """ ;
-    ]
+    ] ;
 
     sh:sparql [
         sh:message "The country of the venue must be the same as the country of its city." ;
@@ -891,7 +894,7 @@
 :Olympics rdf:type owl:Class ;
         rdfs:label "Olympics" ;
         rdfs:comment "Represents an Olympic event, either Winter or Summer." ;
-        rdfs:subClassOf :_DescriptionEntities, _ObjectName,
+        rdfs:subClassOf :_DescriptionEntities, :_ObjectName,
                 [ a owl:Restriction ;
                         owl:onProperty :hostCountry ;
                         owl:minCardinality "1"^^xsd:nonNegativeInteger ;
@@ -1094,7 +1097,7 @@
 :Discipline rdf:type owl:Class ;
         rdfs:label "Discipline" ;
         rdfs:comment "Represents a discipline (e.g., Athletics, Swimming)." ;
-        rdfs:subClassOf :_DescriptionEntities, _ObjectName,
+        rdfs:subClassOf :_DescriptionEntities, :_ObjectName,
                 [ a owl:Restriction ;
                         owl:onProperty :disciplineHasTrial ;
                         owl:minCardinality "1"^^xsd:nonNegativeInteger ] .
@@ -1144,8 +1147,8 @@
         owl:equivalentClass schema:SportsEvent ;
         owl:hasKey ( :hasDate :belongsToTrial ) ;
         rdfs:label "Event" ;
-        rdfs:comment "Represents a specific event in a discipline (e.g., 100m Sprint)." .
-        rdfs:subClassOf :_DescriptionEntities, _ObjectName,
+        rdfs:comment "Represents a specific event in a discipline (e.g., 100m Sprint)." ;
+        rdfs:subClassOf :_DescriptionEntities, :_ObjectName,
                 [ a owl:Restriction ;
                         owl:onProperty :belongsToTrial ;
                         owl:minCardinality "1"^^xsd:nonNegativeInteger ;
@@ -1192,11 +1195,14 @@
 :belongToOlympics a owl:FunctionalProperty .
 
 :hasParticipant rdf:type owl:ObjectProperty ;
-        rdfs:label "belong to athlete" ;
-        rdfs:domain :Event ;
-        rdfs:range [ rdfs:Class :Athlete :Team ]
-        rdfs:comment "Links an event to the athlete it belongs to." ;
-        owl:inverseOf : participatesIn.
+    rdfs:label "belong to athlete" ;
+    rdfs:domain :Event ;
+    rdfs:range [ 
+        a owl:Class ;
+        owl:unionOf ( :Athlete :Team )
+    ] ;
+    rdfs:comment "Links an event to the athlete it belongs to." ;
+    owl:inverseOf :participatesIn .
 
 :hostedBy rdf:type owl:ObjectProperty ;
         rdfs:label "hosted by" ;
@@ -1295,8 +1301,8 @@
 
 :Trial rdf:type owl:Class ;
         rdfs:label "Trial" ;
-        rdfs:comment "Represents a specific trial in a discipline (e.g., 100m Sprint)." .
-        rdfs:subClassOf :_isDisabled, _DescriptionEntities, _ObjectName,
+        rdfs:comment "Represents a specific trial in a discipline (e.g., 100m Sprint)." ;
+        rdfs:subClassOf :_isDisabled, :_DescriptionEntities, :_ObjectName,
                 [ a owl:Restriction ;
                         owl:onProperty :belongsToDiscipline ;
                         owl:minCardinality "1"^^xsd:nonNegativeInteger ;
@@ -1374,7 +1380,7 @@
         owl:hasKey ( :playedBy :hasEvent :isScheduledAtTime ) ;
         rdfs:label "Performance" ;
         rdfs:comment "Represents an athlete's performance in an event, including results and rankings." ;
-        rdfs:subClassOf :_DescriptionEntities, _ObjectName,
+        rdfs:subClassOf :_DescriptionEntities, :_ObjectName,
                 [ rdf:type owl:Restriction ;
                         owl:onProperty :hasResult ;
                         owl:minCardinality "1"^^xsd:nonNegativeInteger  ;
@@ -1433,12 +1439,15 @@
 :hasEvent a owl:FunctionalProperty .
 
 :playedBy rdf:type owl:ObjectProperty ;
-        rdfs:label "played by" ;
-        rdfs:domain :Performance ;
-        rdfs:range [ rdfs:Class :Athlete :Team ] ;
-        rdfs:comment "Links a performance to the athlete or team that achieved it." ;
-        owl:inverseOf :hasPerformance . 
-:playedBy a owl:FunctionalProperty .
+    rdfs:label "played by" ;
+    rdfs:domain :Performance ;
+    rdfs:range [ 
+        a owl:Class ;
+        owl:unionOf ( :Athlete :Team )
+    ] ;
+    rdfs:comment "Links a performance to the athlete or team that achieved it." ;
+    owl:inverseOf :hasPerformance ;
+    a owl:FunctionalProperty .
 
 :hasResultUnit rdf:type owl:ObjectProperty ;
         rdfs:label "has result unit" ;
@@ -1583,7 +1592,7 @@
 :Medal rdf:type owl:Class ;
         rdfs:label "Medal" ;
         rdfs:comment "Represents a medal (Gold, Silver, Bronze)." ;
-        rdfs:subClassOf :_DescriptionEntities, _ObjectName ;
+        rdfs:subClassOf :_DescriptionEntities, :_ObjectName ;
         owl:oneOf ( :Gold :Silver :Bronze ) .
 
 
@@ -1620,11 +1629,11 @@
 
 
 :WorldRecord rdf:type owl:Class ;
-        owl:hasKey ( :recordForTrial recordHasPerformance ) ;
+        owl:hasKey ( :recordForTrial :recordHasPerformance ) ;
         owl:disjointWith :OlympicRecord ;
         rdfs:label "World Record" ;
         rdfs:comment "Represents the best performance ever recorded in a specific event." ;
-        rdfs:subClassOf :_Record, _DescriptionEntities, _ObjectName .
+        rdfs:subClassOf :_Record, :_DescriptionEntities, :_ObjectName .
 
 
 :WorldRecordShape a sh:NodeShape ;
@@ -1655,11 +1664,11 @@
 
 
 :OlympicRecord rdf:type owl:Class ;
-        owl:hasKey ( :recordForTrial recordHasPerformance ) ;
+        owl:hasKey ( :recordForTrial :recordHasPerformance ) ;
         owl:disjointWith :WorldRecord ;
         rdfs:label "Olympic Record" ;
         rdfs:comment "Represents the best performance ever recorded in a specific event at the Olympics." ;
-        rdfs:subClassOf :_Record, _DescriptionEntities, _ObjectName .
+        rdfs:subClassOf :_Record, :_DescriptionEntities, :_ObjectName .
 
 
 :OlympicRecordShape a sh:NodeShape ;
@@ -1694,7 +1703,7 @@
         owl:unionOf ( :Country :OlympicCommittee ) ;
         rdfs:label "Represent" ;
         rdfs:comment "Represents the relationship between an athlete and a country." ;
-        rdfs:subClassOf :_DescriptionEntities, _ObjectName .
+        rdfs:subClassOf :_DescriptionEntities, :_ObjectName .
 
 :RepresentShape a sh:NodeShape ;
     sh:targetClass :Represent ;
@@ -1715,7 +1724,7 @@
 :OlympicCommittee rdf:type owl:Class ;
         rdfs:label "Olympic Committee" ;
         rdfs:comment "Represents the olympic committee for all athletes." ;
-        rdfs:subClassOf :_DescriptionEntities, _ObjectName .
+        rdfs:subClassOf :_DescriptionEntities, :_ObjectName .
 
 
 ###-------------------END CLASS OLYMPICCOMMITTEE-----------------------------------------------
@@ -1727,7 +1736,7 @@
     owl:hasKey ( :hasLatitude :hasLongitude ) ;
     rdfs:label "Coordinate" ;
     rdfs:comment "Represents the coordinate of a place." ;
-    rdfs:subClassOf :_DescriptionEntities, _ObjectName, 
+    rdfs:subClassOf :_DescriptionEntities, :_ObjectName, 
     [
         a owl:Restriction ;
         owl:onProperty :hasLongitude ;
