@@ -128,9 +128,8 @@ def load_graph():
     try:
         # Liste des fichiers à charger
         files = [
-            ("../data/data/output_og_24.ttl", "fichier des JO"),
-            ("../data/data/paris.ttl", "fichier de Paris")
-        ]
+            ("../data/data/output_og_24.ttl", "fichier des JO")        
+            ]
         
         for file_path, description in files:
             try:
