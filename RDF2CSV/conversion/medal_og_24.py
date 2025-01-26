@@ -23,15 +23,22 @@ from constants import \
     BlankHasResult, \
     separator, \
     namespace, \
-    olympicsParameters
+    olympicsParameters, \
+    pathToVenueData
+
 
 from ConstructRDF import ConstructRDF
+from venues_og_24 import generate_discipline_to_venue_dictionary_from_csv
 
 
 def function_for_medal_og_24(reader, constructorRDF):
+    dicionaryDisciplineToVenue = generate_discipline_to_venue_dictionary_from_csv(pathToVenueData)
+
     olympicsTrial = []
     olympicsVenue = []
     olympicsEvent = []
+    disciplineToTrialDict = {}
+    disciplineToParametersDict = {}
     globalOperation = ConstructRDF.ADD_OPERATION
     for row in reader:
         is_team_event = normalize_string(row["Name"]) == normalize_string(row["Country"])
@@ -60,10 +67,25 @@ def function_for_medal_og_24(reader, constructorRDF):
         eventParticipants =[]
         eventPerformances = [performanceWritting]
         eventHostedBy = []
+        if discplineName in dicionaryDisciplineToVenue:
+            eventHostedBy = dicionaryDisciplineToVenue[discplineName]
 
         globalOperation = ConstructRDF.ADD_OPERATION
 
         constructorRDF.createCountry(globalOperation, countryName, countryName, countryCode, BlankCoordinateWritting, None)
+
+
+        if discplineName not in disciplineToTrialDict:
+            disciplineToTrialDict[discplineName] = [trialName]
+            disciplineParameters = {}
+            disciplineParameters["name"] = discplineName
+            disciplineParameters["description"] = None
+            disciplineParameters["globalOperation"] = globalOperation
+            disciplineParameters["disciplineWriting"] = discplineName
+            disciplineToParametersDict[discplineName] = disciplineParameters
+        else:
+            disciplineToTrialDict[discplineName].append(trialName)
+
         constructorRDF.createDiscipline(globalOperation, discplineName, None, discplineName, None)
         success = constructorRDF.createTrial(globalOperation, trialName, discplineName, is_team_event, trialName, trialDescription)
         if success:
@@ -94,6 +116,11 @@ def function_for_medal_og_24(reader, constructorRDF):
                                              eventName, eventDescription)
         if success:
             olympicsEvent.append(eventWritting)
+
+    for disciplineName, trialList in disciplineToTrialDict.items():
+        disciplineParameters = disciplineToParametersDict[disciplineName]
+        constructorRDF.createDiscipline(disciplineParameters["globalOperation"], disciplineParameters["disciplineWriting"],
+                                        trialList, disciplineParameters["name"], disciplineParameters["description"])
 
     olympicsParameters["hasTrial"] = olympicsTrial
     olympicsParameters["hasVenue"] = olympicsVenue

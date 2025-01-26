@@ -83,6 +83,32 @@ class ConstructRDF:
         else:
             return False
 
+    def get_property_values(self, element_name, property_name):
+        """
+        Récupère les valeurs d'une propriété pour un élément donné, en utilisant RDFLib.
+
+        :param element_name: Le nom de l'élément (URI simplifié, par ex. "EquipeDeFrance").
+        :param property_name: Le nom de la propriété (URI simplifié, par ex. "hasMember").
+        :return: Liste des noms simplifiés des objets liés par la propriété.
+        """
+        element_uri = URIRef(self.EX[element_name])
+        property_uri = URIRef(self.EX[property_name])
+
+        # Récupérer tous les objets liés par la propriété
+        objects = [
+            obj
+            for _, _, obj in self.g.triples((element_uri, property_uri, None))
+        ]
+
+        # Transformer les URIRef en noms simplifiés
+        simplified_values = []
+        for obj in objects:
+            if isinstance(obj, URIRef):  # Si l'objet est un URI
+                simplified_values.append(self.g.qname(obj).split(":")[-1])
+            else:
+                simplified_values.append(str(obj))
+        return simplified_values
+
     def createTeam(self, operation, teamWirtting, teamName, teamDescription, isDisabled, hasMember: list, represent):
         if teamWirtting in self.teams:
             return False
@@ -300,8 +326,8 @@ class ConstructRDF:
             for participant in hasParticipant:
                 operation((event_uri, self.EX["hasParticipant"], URIRef(self.EX[participant])))
         if hostedBy:
-            for city in hostedBy:
-                operation((event_uri, self.EX["hostedBy"], URIRef(self.EX[city])))
+            for venue in hostedBy:
+                operation((event_uri, self.EX["hostedBy"], URIRef(self.EX[venue])))
         if belongToOlympics:
             operation((event_uri, self.EX["belongToOlympics"], URIRef(self.EX[belongToOlympics])))
         if name:

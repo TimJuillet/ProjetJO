@@ -13,6 +13,8 @@ BlankIsDisabled = False
 BlankHasResultUnit = "blank_unit"
 BlankHasResult = "-1"
 
+pathToVenueData = "../data/venues_og_24.csv"
+
 separator = "%20"
 namespace = {
     "": ("http://example.org/olympics#", Namespace("http://example.org/olympics#")),
