@@ -22,7 +22,7 @@
 
 
 
-[] rdf:type owl: AllDisjointClasses ;
+[] rdf:type owl:AllDisjointClasses ;
         owl:members
                 ( :Country :City :Venue :Discipline :Trial :Event) .
 
