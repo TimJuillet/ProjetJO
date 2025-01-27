@@ -61,8 +61,8 @@ def function_for_medal_og_24(reader, constructorRDF):
         performanceWritting = trialName + "_" + athleteName + "_" + transformer_date(date)
         performanceName = row["Medal_type"] + " " + row["Event"] + " " + row["Name"] + " " + transformer_date(date)
         performanceDescription = "Performance of " + row["Name"] + " in " + row["Event"] + " at the " + row["Medal_type"] + " on " + transformer_date(date)
-        eventWritting = trialName + "_" + transformer_date(date)
-        eventName = row["Event"] + " " + transformer_date(date)
+        eventWritting = discplineName + "_" + trialName + "_" + transformer_date(date)
+        eventName = capitalize_words(normalize_string(row["Discipline"])) + " " + row["Event"] + " " + transformer_date(date)
         eventDescription = "Event " + row["Event"] + " on " + transformer_date(date)
         eventParticipants =[]
         eventPerformances = [performanceWritting]
