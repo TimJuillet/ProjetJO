@@ -1,0 +1,24 @@
+@prefix : <http://example.org/olympics#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:Event_Opening_Ceremony a :Event ;
+    :name "Cérémonie d'ouverture" ;
+    :belongsToDiscipline :Ceremony ;
+    :isScheduledAtTime "2024-07-26T21:00:00"^^xsd:dateTime ;
+    :takesPlaceAt :STADE_DE_FRANCE_STADE_D_ATHLETISME .
+
+:Event_Athletics_100m a :Event ;
+    :name "Athlétisme - 100m Hommes Finale" ;
+    :belongsToDiscipline :Athletics ;
+    :isScheduledAtTime "2024-08-04T21:00:00"^^xsd:dateTime ;
+    :takesPlaceAt :STADE_DE_FRANCE_STADE_D_ATHLETISME .
+
+:Event_Athletics_Marathon a :Event ;
+    :name "Athlétisme - Marathon Femmes" ;
+    :belongsToDiscipline :Athletics ;
+    :isScheduledAtTime "2024-08-11T08:00:00"^^xsd:dateTime ;
+    :takesPlaceAt :STADE_DE_FRANCE_STADE_D_ATHLETISME .
+
+# Définition explicite du stade pour assurer la correspondance
+:STADE_DE_FRANCE_STADE_D_ATHLETISME a :Venue ;
+    :name "STADE DE FRANCE" .

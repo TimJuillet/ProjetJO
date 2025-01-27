@@ -1,0 +1,42 @@
+2025-01-27 00:13:28 ["sqqib8vktk6nt"] Context NOTICE: --------- Starting SPARQL micro-service --------
+2025-01-27 00:13:28 ["sqqib8vktk6nt"] service NOTICE: Query parameter (html special chars encoded) 'service': JO/getInfosStade
+2025-01-27 00:13:28 ["sqqib8vktk6nt"] service NOTICE: Query parameter (html special chars encoded) 'querymode': sparql
+2025-01-27 00:13:28 ["sqqib8vktk6nt"] Utils NOTICE: Query HTTP header "Content-Type" undefined.
+2025-01-27 00:13:28 ["sqqib8vktk6nt"] Utils NOTICE: Query HTTP header "Accept": application/sparql-results+json
+2025-01-27 00:13:28 ["sqqib8vktk6nt"] service NOTICE: Client SPARQL query (html special chars encoded):
+
+                    SELECT DISTINCT * WHERE {
+                        ?x ?y ?z
+                    }
+                    
+2025-01-27 00:13:28 ["sqqib8vktk6nt"] service NOTICE: Will query the Web API with arguments: Array
+(
+    [name] => STADE DE FRANCE
+)
+
+2025-01-27 00:13:28 ["sqqib8vktk6nt"] service NOTICE: Web API query string: https://equipements.sports.gouv.fr/api/explore/v2.1/catalog/datasets/data-es/records?where=inst_nom=%22STADE%20DE%20FRANCE%22
+2025-01-27 00:13:28 ["sqqib8vktk6nt"] service NOTICE: Executing SPARQL CONSTRUCT query from file: /services/JO/getInfosStade/construct.sparql
+2025-01-27 00:13:28 ["sqqib8vktk6nt"] service NOTICE: Evaluating client SPARQL query against temporary graph...
+2025-01-27 00:13:28 ["sqqib8vktk6nt"] service NOTICE: Sending response with Content-Type: application/sparql-results+json
+2025-01-27 00:13:28 ["sqqib8vktk6nt"] service NOTICE: --------- Done - SPARQL ÂµS execution --------
+2025-01-27 00:13:30 ["u0f44lk653d1o"] Context NOTICE: --------- Starting SPARQL micro-service --------
+2025-01-27 00:13:30 ["u0f44lk653d1o"] service NOTICE: Query parameter (html special chars encoded) 'service': JO/getInfosStade
+2025-01-27 00:13:30 ["u0f44lk653d1o"] service NOTICE: Query parameter (html special chars encoded) 'querymode': sparql
+2025-01-27 00:13:30 ["u0f44lk653d1o"] Utils NOTICE: Query HTTP header "Content-Type" undefined.
+2025-01-27 00:13:30 ["u0f44lk653d1o"] Utils NOTICE: Query HTTP header "Accept": application/sparql-results+json
+2025-01-27 00:13:30 ["u0f44lk653d1o"] service NOTICE: Client SPARQL query (html special chars encoded):
+
+                    SELECT DISTINCT * WHERE {
+                        ?x ?y ?z
+                    }
+                    
+2025-01-27 00:13:31 ["u0f44lk653d1o"] service NOTICE: Will query the Web API with arguments: Array
+(
+    [name] => STADE DE FRANCE
+)
+
+2025-01-27 00:13:31 ["u0f44lk653d1o"] service NOTICE: Web API query string: https://equipements.sports.gouv.fr/api/explore/v2.1/catalog/datasets/data-es/records?where=inst_nom=%22STADE%20DE%20FRANCE%22
+2025-01-27 00:13:31 ["u0f44lk653d1o"] service NOTICE: Executing SPARQL CONSTRUCT query from file: /services/JO/getInfosStade/construct.sparql
+2025-01-27 00:13:31 ["u0f44lk653d1o"] service NOTICE: Evaluating client SPARQL query against temporary graph...
+2025-01-27 00:13:31 ["u0f44lk653d1o"] service NOTICE: Sending response with Content-Type: application/sparql-results+json
+2025-01-27 00:13:31 ["u0f44lk653d1o"] service NOTICE: --------- Done - SPARQL ÂµS execution --------
