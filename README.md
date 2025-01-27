@@ -6,9 +6,24 @@
   - [Sommaire](#sommaire)
   - [Analyse du RDFS](#analyse-du-rdfs)
     - [1. Introduction](#1-introduction)
-    - [2. Analyse du graphe RDFS](#2-analyse-du-graphe-rdfs)
-    - [3. Utilisation des OWL et SHACL](#3-utilisation-des-owl-et-shacl)
-      - [3.1 OWL (Web Ontology Language)](#31-owl-web-ontology-language)
+    - [2. **Classes et Explications**](#2-classes-et-explications)
+      - [<u>**Classe City :**</u>](#uclasse-cityu)
+      - [<u>**Classe Venue :**</u>](#uclasse-venueu)
+      - [<u>**Classe Country :**</u>](#uclasse-countryu)
+      - [<u>**Classe Représent :**</u>](#uclasse-représentu)
+      - [<u>**Classe Discipline :**</u>](#uclasse-disciplineu)
+      - [<u>**Classe Trial :**</u>](#uclasse-trialu)
+      - [<u>**Classe Event :**</u>](#uclasse-eventu)
+      - [<u>**Classe Olympic :**</u>](#uclasse-olympicu)
+      - [<u>**Classes WorldRecord et OlympicRecord :**</u>](#uclasses-worldrecord-et-olympicrecordu)
+      - [<u>**Classe Performance :**</u>](#uclasse-performanceu)
+      - [<u>**Classes Athlete et Team :**</u>](#uclasses-athlete-et-teamu)
+      - [<u>**Classe Person :**</u>](#uclasse-personu)
+      - [<u>**Propriétés inversées :**</u>](#upropriétés-inverséesu)
+      - [<u>Conclusion</u>](#conclusion)
+    - [3. Analyse du graphe RDFS](#3-analyse-du-graphe-rdfs)
+    - [4. Utilisation des OWL et SHACL](#4-utilisation-des-owl-et-shacl)
+      - [4.1 OWL (Web Ontology Language)](#41-owl-web-ontology-language)
         - [1. Disjonction des classes](#1-disjonction-des-classes)
         - [2. Propriétés fonctionnelles et inversement fonctionnelles](#2-propriétés-fonctionnelles-et-inversement-fonctionnelles)
         - [3. Propriétés inverses et transitives](#3-propriétés-inverses-et-transitives)
@@ -16,14 +31,22 @@
         - [5. Définition de clé](#5-définition-de-clé)
         - [6. Union de classes](#6-union-de-classes)
         - [7. Cardinalité minimale](#7-cardinalité-minimale)
-      - [3.2 SHACL (Shapes Constraint Language)](#32-shacl-shapes-constraint-language)
+      - [4.2 SHACL (Shapes Constraint Language)](#42-shacl-shapes-constraint-language)
         - [1. Validation de l'appartenance d'un trial à une discipline](#1-validation-de-lappartenance-dun-trial-à-une-discipline)
         - [2. Vérification des médailles en fonction des rangs](#2-vérification-des-médailles-en-fonction-des-rangs)
         - [3. Correspondance des médailles avec les rangs](#3-correspondance-des-médailles-avec-les-rangs)
         - [4. Correspondance des dates d'un événement avec son horaire](#4-correspondance-des-dates-dun-événement-avec-son-horaire)
         - [5. Cohérence entre les pays d'une ville et de son lieu](#5-cohérence-entre-les-pays-dune-ville-et-de-son-lieu)
         - [6. Cohérence entre un athlète et son équipe](#6-cohérence-entre-un-athlète-et-son-équipe)
-    - [4. Conclusion](#4-conclusion)
+    - [5. Conclusion](#5-conclusion)
+  - [CSV TO RDF](#csv-to-rdf)
+    - [Fichiers CSV](#fichiers-csv)
+      - [1. `athlete_og_24.csv`](#1-athlete_og_24csv)
+      - [2. `venues_og_24.csv`](#2-venues_og_24csv)
+      - [3. `medal_og_24.csv`](#3-medal_og_24csv)
+    - [Méthodologie de Conversion](#méthodologie-de-conversion)
+      - [1. `medal_og_24.py` et `athlete_og_24.py`](#1-medal_og_24py-et-athlete_og_24py)
+    - [Conclusion](#conclusion-1)
   - [Conception et implémentation du micro-service](#conception-et-implémentation-du-micro-service)
     - [Transformation des données et gestion des identifiants](#transformation-des-données-et-gestion-des-identifiants)
     - [Structuration des coordonnées géographiques](#structuration-des-coordonnées-géographiques)
@@ -52,7 +75,62 @@ Le graph RDFS représenté ci-dessous couvre les relations entre les différente
 
 ![Graph](graph.png)
 
-### 2. Analyse du graphe RDFS
+### **2. Classes et Explications**
+
+#### <u>**Classe City :**</u>
+La classe **City** possède une propriété vers **Country** afin d’associer un pays à la ville. Elle contient également une propriété vers **Coordonnées**, permettant de renseigner la position géographique de la ville.
+
+#### <u>**Classe Venue :**</u>
+La classe **Venue** possède une propriété vers **Country** et **City** afin de renseigner la ville et le pays associés au lieu. Elle dispose également d'une propriété vers **Coordonnées** pour indiquer la localisation géographique du lieu.
+
+#### <u>**Classe Country :**</u>
+La classe **Country** possède uniquement une propriété vers **Coordonnées** afin de renseigner la position géographique du pays.
+
+#### <u>**Classe Représent :**</u>
+Les classes **Country** et **OlympicComitee** sont reliées par la classe **Représent**, qui symbolise quel pays un athlète représente. Cela est particulièrement utile dans les cas où un athlète possède une double nationalité ou lorsque certains pays sont exclus des Jeux Olympiques, comme cela a été le cas pour la Russie, par exemple.
+
+#### <u>**Classe Discipline :**</u>
+La classe **Discipline** possède une propriété pointant vers **Trial (Épreuve)** pour représenter l’ensemble des épreuves associées à une discipline. Par exemple, pour la discipline de l'escrime, les épreuves peuvent être : épée par équipe masculine, épée par équipe féminine, épée individuelle homme, sabre individuel femme, etc.
+
+#### <u>**Classe Trial :**</u>
+La classe **Trial** possède une propriété vers **Discipline** afin de connaître la discipline à laquelle elle est rattachée.
+
+#### <u>**Classe Event :**</u>
+La classe **Event** représente une épreuve temporalisée. Par exemple, l’épreuve "épée homme individuelle" a eu lieu à plusieurs éditions des Jeux Olympiques. Là où **Trial** décrit juste le type d’épreuve, **Event** comporte des propriétés supplémentaires, comme la date exacte. Par exemple, l’épreuve "épée homme individuelle" s'est déroulée le 28 juillet 2024 lors des JO de Paris.
+
+Un **Event** peut avoir un ou plusieurs lieux associés pour indiquer où l’épreuve s’est déroulée. Il est aussi lié à un ou plusieurs **Olympic** pour savoir de quelle édition des Jeux il s'agit. De plus, un **Event** peut être associé à des entités sportives (**Athlete** ou **Team**). Il peut y avoir entre 0 et une infinité d'entités sportives associées, notamment dans le cas où l’épreuve a été annulée. Enfin, un **Event** peut avoir plusieurs **Performances** associées, de 0 à une infinité, chaque entité sportive ayant une performance.
+
+#### <u>**Classe Olympic :**</u>
+La classe **Olympic** représente une édition des Jeux Olympiques, comme par exemple "Paris 2024". Elle possède plusieurs propriétés, dont une qui pointe vers le pays hôte et une autre vers les lieux d’accueil des épreuves. Elle contient aussi deux propriétés distinctes pointant vers la classe **City** : une pour la ville hôte (unique) et une pour les villes annexes (celles où se sont déroulées des épreuves, comme Marseille pour la voile lors des JO de Paris 2024). La classe **Olympic** contient également une propriété vers **Trial**, représentant les épreuves associées. Le nombre d'épreuves est toujours d'au moins 7, car toute l’histoire des JO en a compté au minimum 7, et cette tendance ne semble pas prête de s'inverser. Enfin, la classe **Olympic** contient une propriété vers **Event**, représentant l'ensemble des épreuves qui se déroulent pendant ces JO.
+
+#### <u>**Classes WorldRecord et OlympicRecord :**</u>
+Les classes **WorldRecord** et **OlympicRecord** possèdent des propriétés associées à **Trial** et **Performance**. Chaque record est lié à une seule épreuve et à une seule performance (celle du record).
+
+#### <u>**Classe Performance :**</u>
+La classe **Performance** est associée à un unique **Event**. En effet, chaque performance est réalisée dans un événement précis. La **Performance** est également associée à une entité sportive (**Athlete** ou **Team**). Elle est liée à une seule médaille, qui peut être entre 0 et 1 médaille.
+
+En outre, la **Performance** possède une propriété qui indique l’unité de mesure associée à la statistique de performance (via la classe **Units**).
+
+#### <u>**Classes Athlete et Team :**</u>
+Les classes **Athlete** et **Team** possèdent chacune une propriété pointant l’une vers l’autre, permettant de savoir dans quelle équipe un athlète fait partie. Par exemple, un athlète peut participer à une épreuve individuelle tout en faisant partie d’une équipe. Cette propriété permet aussi de connaître les athlètes faisant partie d’une équipe donnée.
+
+Ces deux classes sont également liées par des propriétés à **Event**, indiquant les épreuves auxquelles ces entités sportives participent. Chaque **Athlete** ou **Team** doit participer à au moins une épreuve, sinon elles ne font pas partie des JO, bien qu'il n'y ait pas de limite au nombre maximum d’épreuves. Elles sont également reliées à la classe **Performance**. De plus, les entités sportives sont liées à un **Représent**, représentant le pays qu’elles défendent.
+
+La classe **Athlete** est liée à la classe **Person**, permettant d’accéder aux informations plus personnelles de l’athlète, comme sa taille, son poids, son prénom, son nom, sa date de naissance, etc.
+
+#### <u>**Classe Person :**</u>
+La classe **Person** est liée à au moins un **Country**, représentant la nationalité de la personne. Chaque personne peut avoir plusieurs nationalités, mais il est nécessaire qu'elle en ait au moins une.
+
+#### <u>**Propriétés inversées :**</u>
+Certaines classes possèdent des propriétés inverses qui les relient, offrant ainsi un meilleur accès aux données en fonction des différents cas d’utilisation.
+
+
+#### <u>Conclusion</u>
+Ce modèle de classes permet de structurer les informations relatives aux Jeux Olympiques, en incluant les pays, villes, disciplines, épreuves, athlètes, performances et records. Il facilite l'organisation et l'accès aux données pour diverses applications liées aux compétitions sportives et à l'analyse des résultats des Jeux Olympiques.
+
+---
+
+### 3. Analyse du graphe RDFS
 
 Le graphe met en évidence les classes principales et les relations qui les unissent. Les flèches entre les entités représentent les propriétés, avec des distinctions en fonction de la cardinalité et des types de propriétés (fonctionnelles, transitives, inverses, etc.).
 
@@ -66,11 +144,11 @@ Les classes clés identifiées incluent notamment (liste non exhaustive) :
 
 Les contraintes de cardinalité appliquées, telles que `isDisabled` et `hasCountry`, permettent d'encadrer les relations entre les entités. Par exemple, une ville ne peut être associée qu'à un seul et unique pays (`owl:cardinality 1`).
 
-### 3. Utilisation des OWL et SHACL
+### 4. Utilisation des OWL et SHACL
 
 Afin d'assurer l'intégrité et la précision des données modélisées, plusieurs axiomes OWL et contraintes SHACL ont été appliqués. Cette section décrit les règles OWL utilisées pour renforcer la sémantique du modèle de données.
 
-#### 3.1 OWL (Web Ontology Language)
+#### 4.1 OWL (Web Ontology Language)
 
 Le langage OWL est utilisé pour enrichir les ontologies avec des règles logiques et des restrictions. Les concepts et propriétés suivants illustrent son utilisation dans notre modèle :
 
@@ -194,7 +272,7 @@ rdfs:subClassOf [
 - Cette restriction impose qu'un individu lié par la propriété `hasMember` doit avoir au moins un membre. Par exemple, une classe représentant une équipe doit toujours contenir au moins un membre.
 
 
-#### 3.2 SHACL (Shapes Constraint Language)
+#### 4.2 SHACL (Shapes Constraint Language)
 
 Le langage SHACL est utilisé pour définir et valider des contraintes sur les données RDF. Ces contraintes permettent d'assurer que les données respectent des règles métier précises et cohérentes avec le modèle. Les exemples ci-dessous illustrent l'utilisation de SHACL dans ce projet. Il s'agit d'une liste non exhaustive.
 
@@ -358,9 +436,61 @@ sh:sparql [
   - Les événements auxquels ils participent (:participatesIn).
 - Cela permet de maintenir une cohérence entre les athlètes et leurs équipes.
 
-### 4. Conclusion
+### 5. Conclusion
 
 L'utilisation combinée de RDFS, OWL et SHACL permet d'assurer une modélisation riche et précise des données, garantissant la cohérence et l'intégrité des relations entre entités. Les règles appliquées offrent des garanties de validation des données tout en facilitant l'interopérabilité avec d'autres systèmes de données sémantiques.
+
+## CSV TO RDF
+
+### Fichiers CSV
+
+#### 1. `athlete_og_24.csv`
+
+Ce fichier contient des informations détaillées sur les athlètes participant aux Jeux Olympiques de Paris 2024. Les colonnes principales incluent :
+
+- **Prénom et Nom de l'athlète** : Identifiants de l'athlète.
+- **Date de naissance** : Permet d'identifier de manière unique les athlètes.
+
+#### 2. `venues_og_24.csv`
+
+Ce fichier établit le lien entre les disciplines sportives et les lieux où elles se dérouleront pendant les Jeux Olympiques de Paris 2024. Bien que dans la structure RDF initiale, les disciplines ne soient pas directement associées à des lieux, nous avons utilisé ce fichier pour enrichir les données en attribuant à chaque événement (Event) un lieu correspondant à sa discipline.
+
+**Limitation** : Lorsque plusieurs lieux sont associés à une discipline (par exemple, l'athlétisme), nous avons attribué systématiquement le premier lieu listé pour cette discipline, faute d'informations détaillées.
+
+#### 3. `medal_og_24.csv`
+
+Ce fichier recense les médailles obtenues par les athlètes. Les colonnes incluent :
+
+- **Medal_type** : Type de médaille (Or, Argent, Bronze).
+- **Medal_code** : Code unique attribué à chaque médaille.
+- **Medal_date** : Date d’attribution de la médaille.
+- **Name** : Nom de l’athlète.
+- **Gender** : Genre de l’athlète.
+- **Discipline et Event** : Discipline sportive et épreuve spécifique.
+- **url_event** : Lien vers plus d’informations sur l’événement.
+- **Country_code** et **Country** : Code ISO et nom du pays de l’athlète.
+
+### Méthodologie de Conversion
+
+Les scripts Python présents dans le dossier `RDFS2CSV/conversion` assurent la transformation des fichiers CSV en RDF (format Turtle). Ces scripts sont conçus pour être modulables et permettent de traiter rapidement d'autres fichiers CSV similaires.
+
+#### 1. `medal_og_24.py` et `athlete_og_24.py`
+
+Ces scripts traitent respectivement les fichiers CSV `medal_og_24.csv` et `athlete_og_24.csv` pour générer des triplets RDF homogènes et assurer l'intégration des données dans le format RDF.
+
+Les scripts suivent une méthodologie précise pour :
+
+- Lire les données à partir des fichiers CSV.
+- Convertir ces données en triplets RDF conformes aux normes du langage Turtle.
+- Associer chaque donnée à une ressource unique dans l'ontologie des Jeux Olympiques de Paris 2024.
+
+Les scripts sont modulables et peuvent être facilement adaptés à d'autres fichiers CSV avec des structures similaires, facilitant ainsi l'intégration de nouvelles données si nécessaire.
+
+### Conclusion
+
+Grâce à cette méthodologie et aux scripts associés, nous avons pu structurer les données des Jeux Olympiques de Paris 2024 dans un format RDF, prêt à être utilisé pour des applications de gestion de données ou des projets d'analyse.
+
+
 
 ## Conception et implémentation du micro-service
 
